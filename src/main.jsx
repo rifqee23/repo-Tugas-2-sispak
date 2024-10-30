@@ -5,6 +5,7 @@ import HomePages from "./Pages/HomePages.jsx";
 import SupplierPages from "./Pages/SupplierPages.jsx";
 import "./index.css";
 import App from "./App.jsx";
+import { ThemeProvider } from "@material-tailwind/react";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </StrictMode>
 );
