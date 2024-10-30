@@ -20,6 +20,7 @@ import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { AiFillDatabase } from "react-icons/ai";
 import { GrTransaction } from "react-icons/gr";
 import { HiDocumentReport } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 export function SidebarWithContentSeparator() {
   const [open, setOpen] = React.useState(0);
@@ -41,7 +42,7 @@ export function SidebarWithContentSeparator() {
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>
           <Typography color="blue-gray" className="mr-auto font-normal">
-            Dashboard
+            <Link to="/">Dashboard</Link>
           </Typography>
           <ListItemPrefix className="mr-5">
             <ChevronRightIcon strokeWidth={2} className="h-5 w-5" />
@@ -83,7 +84,7 @@ export function SidebarWithContentSeparator() {
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
-                Data Supplier
+                <Link to="/supplier">Data Supplier</Link>
               </ListItem>
               <ListItem>
                 <ListItemPrefix>
