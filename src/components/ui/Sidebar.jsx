@@ -37,17 +37,20 @@ export function SidebarWithContentSeparator() {
         </Typography>
       </div>
       <List>
-        <ListItem className="p-0 ml-3">
-          <ListItemPrefix>
-            <PresentationChartBarIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          <Typography color="blue-gray" className="mr-auto font-normal">
-            <Link to="/">Dashboard</Link>
-          </Typography>
-          <ListItemPrefix className="mr-5">
-            <ChevronRightIcon strokeWidth={2} className="h-5 w-5" />
-          </ListItemPrefix>
-        </ListItem>
+        <Link to="/">
+          <ListItem className="p-0 ml-3">
+            <ListItemPrefix>
+              <PresentationChartBarIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            <Typography color="blue-gray" className="mr-auto font-normal">
+              Dashboard
+            </Typography>
+            <ListItemPrefix className="mr-5">
+              <ChevronRightIcon strokeWidth={2} className="h-5 w-5" />
+            </ListItemPrefix>
+          </ListItem>
+        </Link>
+
         <Accordion
           open={open === 2}
           icon={
@@ -74,24 +77,30 @@ export function SidebarWithContentSeparator() {
           </ListItem>
           <AccordionBody className="py-1">
             <List className="p-0">
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Data Barang
-              </ListItem>
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                <Link to="/supplier">Data Supplier</Link>
-              </ListItem>
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Data Stackholder
-              </ListItem>
+              <Link to={"product"}>
+                <ListItem>
+                  <ListItemPrefix>
+                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                  </ListItemPrefix>
+                  Data Barang
+                </ListItem>
+              </Link>
+              <Link to={"supplier"}>
+                <ListItem>
+                  <ListItemPrefix>
+                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                  </ListItemPrefix>
+                  Data Supplier
+                </ListItem>
+              </Link>
+              <Link to={"stackholder"}>
+                <ListItem>
+                  <ListItemPrefix>
+                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                  </ListItemPrefix>
+                  Data Stackholder
+                </ListItem>
+              </Link>
             </List>
           </AccordionBody>
         </Accordion>
