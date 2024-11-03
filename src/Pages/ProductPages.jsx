@@ -1,6 +1,13 @@
 import MaterialTable from "@/components/ui/MaterialTable";
+import { Link } from "react-router-dom";
 
-const head = ["Name", "Category", "Price", "Stock", "Supplier"];
+const head = [
+  { label: "Name", type: "text" },
+  { label: "Category", type: "text" },
+  { label: "Price", type: "number" },
+  { label: "Stock", type: "number" },
+  { label: "Supplier", type: "text" },
+];
 
 const data = [
   {
@@ -62,8 +69,18 @@ const data = [
 ];
 
 const ProductPages = () => {
+  head.map((item) => {
+    console.log(item.label);
+  });
   return (
-    <div>
+    <div className="pt-10">
+      <Link
+        className=" mb-4 bg-blue-200 text-white p-2 rounded-lg hover:bg-blue-500 transition duration-300 ease-in-out"
+        to="/product/create"
+        state={{ head, data }}
+      >
+        Create Product
+      </Link>
       <MaterialTable tableHead={head} tableRows={data} />
     </div>
   );

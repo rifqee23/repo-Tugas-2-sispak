@@ -16,7 +16,7 @@ function MaterialTable({ tableHead, tableRows }) {
                   color="blue-gray"
                   className="font-normal leading-none opacity-70"
                 >
-                  {head}
+                  {head.label}
                 </Typography>
               </th>
             ))}
@@ -44,7 +44,7 @@ function MaterialTable({ tableHead, tableRows }) {
                       color="blue-gray"
                       className="font-normal text-center"
                     >
-                      {row[head.toLowerCase()] ?? "-"}
+                      {row[head.label.toLowerCase()] ?? "-"}
                     </Typography>
                   </td>
                 ))}
