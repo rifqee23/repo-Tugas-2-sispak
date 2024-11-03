@@ -1,5 +1,18 @@
 import MaterialTable from "@/components/ui/MaterialTable";
-const TABLE_HEAD = ["Name", "Email", "Role"];
+const TABLE_HEAD = [
+  {
+    label: "Name",
+    type: "text",
+  },
+  {
+    label: "Email",
+    type: "text",
+  },
+  {
+    label: "Role",
+    type: "text",
+  },
+];
 
 const TABLE_ROWS = [
   {

@@ -5,6 +5,7 @@ import HomePages from "./Pages/HomePages.jsx";
 import SupplierPages from "./Pages/SupplierPages.jsx";
 import ProductPages from "./Pages/ProductPages.jsx";
 import StackholderPages from "./Pages/StackholderPages.jsx";
+import CreateProduct from "./Pages/CreateProduct.jsx";
 import "./index.css";
 import App from "./App.jsx";
 import { ThemeProvider } from "@material-tailwind/react";
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "/product",
         element: <ProductPages />,
+      },
+      {
+        path: "/product/create",
+        element: <CreateProduct />,
       },
       {
         path: "/stackholder",
