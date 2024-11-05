@@ -9,6 +9,7 @@ import CreateProduct from "./Pages/CreateProduct.jsx";
 import "./index.css";
 import App from "./App.jsx";
 import { ThemeProvider } from "@material-tailwind/react";
+import { ProductProvider } from "./contexts/ProductContext.jsx";
 
 const router = createBrowserRouter([
   {
@@ -42,7 +43,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ThemeProvider>
-      <RouterProvider router={router} />
+      <ProductProvider>
+        <RouterProvider router={router} />
+      </ProductProvider>
     </ThemeProvider>
   </StrictMode>
 );

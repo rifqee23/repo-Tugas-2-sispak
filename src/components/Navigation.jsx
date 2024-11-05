@@ -3,7 +3,7 @@ import { SidebarWithContentSeparator } from "@/components/ui/Sidebar.jsx";
 import { StickyNavbar } from "@/components/ui/Nav.jsx";
 import { useState } from "react";
 
-const Layouts = () => {
+const Navigation = () => {
   const [isMdScreen, setIsMdScreen] = useState(false);
 
   const handleMdScreen = () => {
@@ -20,4 +20,4 @@ const Layouts = () => {
   );
 };
 
-export default Layouts;
+export default Navigation;
