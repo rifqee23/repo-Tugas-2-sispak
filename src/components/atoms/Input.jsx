@@ -1,7 +1,13 @@
-const Input = ({ type }) => {
+const Input = ({ type, name, value, onChange }) => {
   return (
     <>
-      <input type={type} className="py-1 rounded-xl px-2 w-full" />
+      <input
+        type={type}
+        name={name}
+        value={value}
+        className="py-1 rounded-xl px-2 w-full"
+        onChange={onChange}
+      />
     </>
   );
 };
