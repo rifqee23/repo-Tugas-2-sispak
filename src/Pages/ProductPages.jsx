@@ -1,6 +1,6 @@
 import MaterialTable from "@/components/ui/MaterialTable";
 import { Link } from "react-router-dom";
-import { useProductContext } from "@/contexts/ProductContext";
+import { useProductStore } from "@/stores/ProductStore";
 
 const head = [
   { label: "Name", type: "text", name: "name" },
@@ -11,7 +11,7 @@ const head = [
 ];
 
 const ProductPages = () => {
-  const { products } = useProductContext();
+  const product = useProductStore((state) => state.product);
 
   return (
     <div className="pt-10">
@@ -22,7 +22,7 @@ const ProductPages = () => {
       >
         Create Product
       </Link>
-      <MaterialTable tableHead={head} tableRows={products} />
+      <MaterialTable tableHead={head} tableRows={product} />
     </div>
   );
 };

@@ -2,12 +2,12 @@
 import FormInput from "@/components/organisms/FormInput";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useProductContext } from "@/contexts/ProductContext";
+import { useProductStore } from "@/stores/ProductStore";
 
 const CreateProduct = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { addProduct } = useProductContext();
+  const addProduct = useProductStore((state) => state.addProduct);
   const inputFields = location.state?.head || [];
   const [inputValues, setInputValues] = useState({});
 
