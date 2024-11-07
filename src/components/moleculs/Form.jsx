@@ -1,7 +1,14 @@
 import Input from "../atoms/Input";
 import Button from "../atoms/Button";
 
-const Form = ({ input, onSubmit, value, onChange }) => {
+const Form = ({
+  input,
+  onSubmit,
+  value,
+  onChange,
+  text = "Submit",
+  classButton,
+}) => {
   return (
     <form
       onSubmit={onSubmit}
@@ -25,7 +32,7 @@ const Form = ({ input, onSubmit, value, onChange }) => {
             </div>
           </div>
         ))}
-        <Button type="submit" text="Submit" />
+        <Button type="submit" text={text} classButton={classButton} />
       </div>
     </form>
   );

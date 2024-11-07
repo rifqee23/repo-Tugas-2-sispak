@@ -9,16 +9,27 @@ import CreateProduct from "./Pages/CreateProduct.jsx";
 import "./index.css";
 import App from "./App.jsx";
 import { ThemeProvider } from "@material-tailwind/react";
+import LoginPage from "./Pages/LoginPage.jsx";
+import ProtectedRoute from "./utils/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
   {
     path: "/",
     element: <App />,
     children: [
       {
         path: "/",
-        element: <HomePages />,
+        element: (
+          <ProtectedRoute>
+            <HomePages />
+          </ProtectedRoute>
+        ),
       },
+
       {
         path: "/supplier",
         element: <SupplierPages />,

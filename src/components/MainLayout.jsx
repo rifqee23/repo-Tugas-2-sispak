@@ -5,7 +5,7 @@ const MainLayout = () => {
   return (
     <div className="w-full md:flex">
       <Navigation />
-      <div className="w-full px-2">
+      <div className="w-full px-2 bg-blue-gray-50">
         <Outlet />
       </div>
     </div>
