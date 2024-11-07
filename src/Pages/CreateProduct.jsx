@@ -25,12 +25,14 @@ const CreateProduct = () => {
   };
 
   return (
-    <div className="px-10">
+    <div className="px-10 pt-5">
       <FormInput
+        title={"Create Product"}
         input={inputFields}
         onSubmit={handleFormSubmit}
         value={inputValues}
         onChange={handleChange}
+        className={"pt-5 bg-white"}
       />
     </div>
   );

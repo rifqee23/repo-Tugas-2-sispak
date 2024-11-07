@@ -21,13 +21,17 @@ import { AiFillDatabase } from "react-icons/ai";
 import { GrTransaction } from "react-icons/gr";
 import { HiDocumentReport } from "react-icons/hi";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import useAuthStore from "@/utils/authStore";
 export function SidebarWithContentSeparator() {
   const [open, setOpen] = React.useState(0);
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
+
+  const navigate = useNavigate();
+  const logoutUser = useAuthStore((state) => state.logoutUser);
 
   return (
     <Card className="h-[calc(100vh)] w-full max-w-[20rem] p-4 bg-blue-200 shadow-xl shadow-blue-gray-900/5">
@@ -133,7 +137,7 @@ export function SidebarWithContentSeparator() {
           Laporan
         </ListItem>
 
-        <ListItem>
+        <ListItem onClick={logoutUser}>
           <ListItemPrefix>
             <PowerIcon className="h-5 w-5" />
           </ListItemPrefix>
