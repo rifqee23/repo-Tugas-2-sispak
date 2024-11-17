@@ -7,7 +7,7 @@ const Navigation = () => {
   const [isMdScreen, setIsMdScreen] = useState(false);
 
   const handleMdScreen = () => {
-    setIsMdScreen(window.innerWidth >= 768);
+    setIsMdScreen(window.innerWidth >= 1024);
   };
   useEffect(() => {
     handleMdScreen();
