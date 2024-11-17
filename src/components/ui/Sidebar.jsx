@@ -21,7 +21,8 @@ import { AiFillDatabase } from "react-icons/ai";
 import { GrTransaction } from "react-icons/gr";
 import { HiDocumentReport } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+
 import useAuthStore from "@/utils/authStore";
 export function SidebarWithContentSeparator() {
   const [open, setOpen] = React.useState(0);
@@ -30,11 +31,27 @@ export function SidebarWithContentSeparator() {
     setOpen(open === value ? 0 : value);
   };
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    const sidebar = document.getElementById("sidebar");
+
+    const disableScroll = (event) => {
+      event.preventDefault();
+    };
+
+    sidebar.addEventListener("wheel", disableScroll, { passive: false });
+
+    return () => {
+      sidebar.removeEventListener("wheel", disableScroll);
+    };
+  }, []);
+
   const logoutUser = useAuthStore((state) => state.logoutUser);
 
   return (
-    <Card className="h-[calc(100vh)] w-full max-w-[20rem] p-4 bg-blue-200 shadow-xl shadow-blue-gray-900/5">
+    <div
+      id="sidebar"
+      className="h-full fixed   w-full max-w-[20rem] p-4 bg-blue-200 shadow-xl shadow-blue-gray-900/5"
+    >
       <div className="mb-2 p-4">
         <Typography variant="h5" color="blue-gray">
           Sidebar
@@ -144,6 +161,6 @@ export function SidebarWithContentSeparator() {
           Log Out
         </ListItem>
       </List>
-    </Card>
+    </div>
   );
 }
