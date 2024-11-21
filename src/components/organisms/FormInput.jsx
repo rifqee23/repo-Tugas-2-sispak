@@ -15,6 +15,7 @@ const FormInput = ({
   styleForm,
   classLabel,
   hideLogo = false,
+  children,
 }) => {
   return (
     <Card shadow={false} className={`${classCard}`}>
