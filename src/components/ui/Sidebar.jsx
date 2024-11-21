@@ -21,9 +21,13 @@ import { AiFillDatabase } from "react-icons/ai";
 import { GrTransaction } from "react-icons/gr";
 import { HiDocumentReport } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
 
+import { useEffect } from "react";
 import useAuthStore from "@/utils/authStore";
+
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
+
 export function SidebarWithContentSeparator() {
   const [open, setOpen] = React.useState(0);
 
@@ -46,6 +50,9 @@ export function SidebarWithContentSeparator() {
   }, []);
 
   const logoutUser = useAuthStore((state) => state.logoutUser);
+  const token = Cookies.get("access_token");
+  const decodedToken = jwtDecode(token);
+  const userRole = decodedToken.role;
 
   return (
     <div
@@ -58,7 +65,7 @@ export function SidebarWithContentSeparator() {
         </Typography>
       </div>
       <List>
-        <Link to="/">
+        <Link to={userRole === "SUPPLIER" ? "/supplier" : "/stakeholder"}>
           <ListItem className="p-0 ml-3">
             <ListItemPrefix>
               <PresentationChartBarIcon className="h-5 w-5" />
@@ -153,13 +160,14 @@ export function SidebarWithContentSeparator() {
           </ListItemPrefix>
           Laporan
         </ListItem>
-
-        <ListItem onClick={logoutUser}>
-          <ListItemPrefix>
-            <PowerIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Log Out
-        </ListItem>
+        <Link to={"/login"} onClick={logoutUser}>
+          <ListItem>
+            <ListItemPrefix>
+              <PowerIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Log Out
+          </ListItem>
+        </Link>
       </List>
     </div>
   );

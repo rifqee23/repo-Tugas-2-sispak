@@ -5,6 +5,7 @@ import useAuthStore from "@/utils/authStore";
 import { useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 const head = [
   { label: "Username", type: "text", name: "username" },
@@ -33,12 +34,30 @@ const LoginPage = () => {
           password,
         }
       );
+      // Dekode token untuk mendapatkan role
 
       if (response.data.message === "Login successfully") {
         const token = response.data.data.token;
+
         Cookies.set("access_token", token, { expires: 1 });
+
+        const decodedToken = jwtDecode(token);
+        const userRole = decodedToken.role;
+
         loginUser(token);
-        navigate("/");
+
+        if (response.data.data.role === userRole) {
+          console.log("test");
+
+          if (userRole === "SUPPLIER") {
+            navigate("/supplier");
+            console.log(userRole);
+          } else if (userRole === "STAKEHOLDER") {
+            navigate("/stakeholder");
+          } else {
+            setError("Role Tidak Cocok");
+          }
+        }
       } else {
         setError("Login gagal. Cek kembali username atau password.");
       }
