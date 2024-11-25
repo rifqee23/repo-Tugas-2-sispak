@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Card,
   Typography,
   List,
   ListItem,
@@ -25,10 +24,7 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import useAuthStore from "@/utils/authStore";
 
-import { jwtDecode } from "jwt-decode";
-import Cookies from "js-cookie";
-
-export function SidebarWithContentSeparator() {
+export function SidebarSupplier() {
   const [open, setOpen] = React.useState(0);
 
   const handleOpen = (value) => {
@@ -50,23 +46,20 @@ export function SidebarWithContentSeparator() {
   }, []);
 
   const logoutUser = useAuthStore((state) => state.logoutUser);
-  const token = Cookies.get("access_token");
-  const decodedToken = jwtDecode(token);
-  const userRole = decodedToken.role;
 
   return (
     <div
       id="sidebar"
-      className="h-full fixed   w-full max-w-[20rem] p-4 bg-blue-200 shadow-xl shadow-blue-gray-900/5"
+      className="fixed h-full w-full max-w-[20rem] bg-blue-200 p-4 shadow-xl shadow-blue-gray-900/5"
     >
       <div className="mb-2 p-4">
         <Typography variant="h5" color="blue-gray">
-          Sidebar
+          Supplier
         </Typography>
       </div>
       <List>
-        <Link to={userRole === "SUPPLIER" ? "/supplier" : "/stakeholder"}>
-          <ListItem className="p-0 ml-3">
+        <Link>
+          <ListItem className="ml-3 p-0">
             <ListItemPrefix>
               <PresentationChartBarIcon className="h-5 w-5" />
             </ListItemPrefix>

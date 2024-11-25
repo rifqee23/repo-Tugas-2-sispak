@@ -15,13 +15,13 @@ import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 
 import { Link } from "react-router-dom";
 
-export function StickyNavbar() {
+export function NavStakeholder() {
   const [openNav, setOpenNav] = React.useState(false);
 
   React.useEffect(() => {
     window.addEventListener(
       "resize",
-      () => window.innerWidth >= 960 && setOpenNav(false)
+      () => window.innerWidth >= 960 && setOpenNav(false),
     );
   }, []);
 
@@ -32,7 +32,7 @@ export function StickyNavbar() {
   };
 
   const navList = (
-    <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+    <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       <Typography
         as="li"
         variant="small"
@@ -43,54 +43,7 @@ export function StickyNavbar() {
           Pages
         </Link>
       </Typography>
-      <Accordion
-        open={open === 2}
-        icon={
-          <ChevronDownIcon
-            strokeWidth={2.5}
-            className={`mx-auto h-4 w-4 transition-transform ${
-              open === 2 ? "rotate-180" : ""
-            }`}
-          />
-        }
-      >
-        <ListItem className="p-0" selected={open === 2}>
-          <AccordionHeader
-            onClick={() => handleOpen(2)}
-            className="border-b-0 p-3"
-          >
-            <Typography color="blue-gray" className="mr-auto font-normal">
-              Master Data
-            </Typography>
-          </AccordionHeader>
-        </ListItem>
-        <AccordionBody className="py-1">
-          <Link to={"product"}>
-            <ListItem>
-              <ListItemPrefix>
-                <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-              </ListItemPrefix>
-              Data Barang
-            </ListItem>
-          </Link>
-          <Link to={"supplier"}>
-            <ListItem>
-              <ListItemPrefix>
-                <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-              </ListItemPrefix>
-              Data Supplier
-            </ListItem>
-          </Link>
-          <Link to={"stackholder"}>
-            <ListItem>
-              <ListItemPrefix>
-                <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-              </ListItemPrefix>
-              Data Stackholder
-            </ListItem>
-          </Link>
-        </AccordionBody>
-      </Accordion>
+
       <Typography
         as="li"
         variant="small"
@@ -126,7 +79,7 @@ export function StickyNavbar() {
 
   return (
     <div className="">
-      <Navbar className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 py-2 ">
+      <Navbar className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 py-2">
         <div className="flex items-center justify-between text-blue-gray-900">
           <Typography
             as="a"

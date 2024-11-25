@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { SidebarWithContentSeparator } from "@/components/ui/Sidebar.jsx";
-import { StickyNavbar } from "@/components/ui/Nav.jsx";
+import { SidebarSupplier } from "../ui/SidebarSupplier";
+import { NavSupplier } from "../ui/NavSupplier";
 import { useState } from "react";
 
-const Navigation = () => {
+const NavigationSupplier = () => {
   const [isMdScreen, setIsMdScreen] = useState(false);
 
   const handleMdScreen = () => {
@@ -15,9 +15,7 @@ const Navigation = () => {
     return () => window.removeEventListener("resize", handleMdScreen);
   }, []);
 
-  return (
-    <div>{isMdScreen ? <SidebarWithContentSeparator /> : <StickyNavbar />}</div>
-  );
+  return <div>{isMdScreen ? <SidebarSupplier /> : <NavSupplier />}</div>;
 };
 
-export default Navigation;
+export default NavigationSupplier;
