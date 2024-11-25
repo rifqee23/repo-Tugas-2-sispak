@@ -4,18 +4,19 @@ const Input = ({
   value,
   onChange,
   id,
-  placeholder = "username",
+  placeholder = "",
+  className
 }) => {
   return (
     <>
       <input
-        id={id}
         type={type}
         name={name}
+        id={id}
         value={value}
-        className="py-1 rounded-xl px-2 w-full outline-none border border-gray-300 bg-blue-gray-50"
         onChange={onChange}
         placeholder={placeholder}
+        className={`${className}`}
       />
     </>
   );

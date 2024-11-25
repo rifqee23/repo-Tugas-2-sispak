@@ -1,16 +1,81 @@
+import React, { useState, useEffect } from "react";
 import { GrTransaction } from "react-icons/gr";
 import { MdLocalShipping, MdStore } from "react-icons/md";
 import { FaHandHoldingUsd } from "react-icons/fa";
+import Cookies from "js-cookie";
+import axios from "axios";
 
-import MaterialTable from "@/components/ui/MaterialTable";
 import MaterialChart from "@/components/ui/MaterialChart";
-import { useProductStore } from "@/stores/ProductStore";
 
-const HomePages = () => {
-  const product = useProductStore((state) => state.product);
+const DashboardStakeholderPage = () => {
+  const [order, setOrder] = useState([]);
+  const [supplier, setSupplier] = useState([]);
+  const [product, setProduct] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const token = Cookies.get("access_token");
+
+  useEffect(() => {
+    const fetchDataTransaction = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/orders/my-orders",
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          },
+        );
+        setOrder(response.data.data);
+      } catch (error) {
+        setError(error.message);
+        console.log(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    const fetchDataSupplier = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/products", {
+          headers: {
+            Authorization: `${token}`,
+          },
+        });
+        const uniqueSuppliers = new Set();
+        response.data.data.forEach((product) => {
+          uniqueSuppliers.add(product.supplier.username);
+        });
+        const uniqueSuppliersArray = Array.from(uniqueSuppliers);
+        setSupplier(uniqueSuppliersArray);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    const fetchDataProduct = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/products", {
+          headers: {
+            Authorization: `${token}`,
+          },
+        });
+
+        setProduct(response.data.data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDataTransaction();
+    fetchDataSupplier();
+    fetchDataProduct();
+  }, []);
 
   return (
-    <div className="p-8">
+    <div className="h-screen p-8">
       <h3 className="text-2xl font-semibold">Dashboard</h3>
 
       {/* Card Start */}
@@ -27,7 +92,7 @@ const HomePages = () => {
               </div>
               <div className="flex justify-center">
                 <h3 className="text-slate-600 text-7xl font-light leading-normal">
-                  120
+                  {order.length}
                 </h3>
               </div>
             </div>
@@ -46,30 +111,13 @@ const HomePages = () => {
               </div>
               <div className="flex justify-center">
                 <h3 className="text-slate-600 text-7xl font-light leading-normal">
-                  120
+                  {supplier.length}
                 </h3>
               </div>
             </div>
           </div>
         </div>
-        {/* Card Transaction success */}
-        <div>
-          <div className="border-slate-200 relative flex w-56 flex-col rounded-lg border bg-white shadow-sm">
-            <div className="p-4">
-              <div className="flex items-center gap-x-4">
-                <FaHandHoldingUsd size={24} />
-                <h5 className="text-slate-800 text-xl font-semibold">
-                  Transaksi
-                </h5>
-              </div>
-              <div className="flex justify-center">
-                <h3 className="text-slate-600 text-7xl font-light leading-normal">
-                  120
-                </h3>
-              </div>
-            </div>
-          </div>
-        </div>
+
         {/* Card Product */}
         <div>
           <div className="border-slate-200 relative flex w-56 flex-col rounded-lg border bg-white shadow-sm">
@@ -77,12 +125,12 @@ const HomePages = () => {
               <div className="flex items-center gap-x-4">
                 <MdStore size={24} />
                 <h5 className="text-slate-800 text-xl font-semibold">
-                  Transaksi
+                  Product
                 </h5>
               </div>
               <div className="flex justify-center">
                 <h3 className="text-slate-600 text-7xl font-light leading-normal">
-                  120
+                  {product.length}
                 </h3>
               </div>
             </div>
@@ -91,13 +139,10 @@ const HomePages = () => {
       </div>
       {/* Card End */}
 
-      <h3 className="text-2xl font-semibold">Daftar Transaksi</h3>
-      <MaterialTable tableHead={head} tableRows={product} />
-
       <h3 className="mt-5 text-2xl font-semibold">Statistik Performa</h3>
       <MaterialChart />
     </div>
   );
 };
 
-export default HomePages;
+export default DashboardStakeholderPage;
