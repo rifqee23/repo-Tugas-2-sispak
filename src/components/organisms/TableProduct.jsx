@@ -5,298 +5,157 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import UpdateProductModal from "./updateProductModal";
 import { jwtDecode } from "jwt-decode";
+import { renderTableRow } from "@/utils/renderTableRow"; // Pastikan path ini benar
 
 const TableProduct = () => {
-  const [product, setProduct] = useState([]);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
+  const token = Cookies.get("access_token");
+  const userId = jwtDecode(token).userID; // Dekode token untuk mendapatkan userID
+
+  // Fungsi untuk membuka modal dan mengatur produk yang dipilih
   const handleOpen = (product) => {
     setSelectedProduct(product);
     setOpen(true);
   };
 
+  // Fungsi untuk menutup modal
   const handleClose = () => {
     setOpen(false);
     setSelectedProduct(null);
   };
 
+  // Fungsi untuk menghapus produk
   const handleDeleteProduct = async (productID) => {
+    console.log("Deleting product with ID:", productID); // Log ID produk yang akan dihapus
     try {
       await axios.delete(`http://localhost:3000/api/products/${productID}`, {
-        headers: {
-          Authorization: `${token}`,
-        },
+        headers: { Authorization: `${token}` },
       });
-      setProduct((prev) => prev.filter((item) => item.productID !== productID));
+      setProducts((prev) =>
+        prev.filter((item) => item.productID !== productID),
+      );
     } catch (error) {
-      console.log(error.message);
+      console.error("Error response:", error.response); // Log respons kesalahan
       setError("Error deleting product: " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const token = Cookies.get("access_token");
-  const decoded = jwtDecode(token);
-  const userId = decoded.userID;
-
-  console.log(decoded);
-
+  // Mengambil data produk dari API
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
           `http://localhost:3000/api/products/user/${userId}`,
-          {
-            headers: {
-              Authorization: `${token}`,
-            },
-          },
+          { headers: { Authorization: `${token}` } },
         );
-        setProduct(response.data.data);
+        setProducts(response.data.data);
       } catch (error) {
-        console.log(error.message);
         setError("Error fetching data: " + error.message);
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, []);
+  }, [userId, token]);
 
+  // Fungsi untuk memperbarui produk
   const handleUpdateProduct = async (updatedProduct) => {
     try {
-      console.log(updatedProduct);
       await axios.put(
         `http://localhost:3000/api/products/${selectedProduct.productID}`,
         updatedProduct,
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        },
+        { headers: { Authorization: `${token}` } },
       );
-      setProduct((prev) =>
+      setProducts((prev) =>
         prev.map((item) =>
-          item.id === updatedProduct.id ? updatedProduct : item,
+          item.productID === selectedProduct.productID
+            ? { ...item, ...updatedProduct }
+            : item,
         ),
       );
     } catch (error) {
-      console.error("Error updating product:", error);
+      setError("Error updating product: " + error.message);
     } finally {
       handleClose();
     }
   };
 
+  console.log(products.length);
+
   return (
-    <Card className="overflow-x-auto">
-      <table className="min-w-full text-left">
-        <thead>
-          <tr>
-            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-              <Typography
-                variant="small"
-                color="blue-gray"
-                className="font-normal leading-none opacity-70"
-              >
-                ID
-              </Typography>
-            </th>
-            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-              <Typography
-                variant="small"
-                color="blue-gray"
-                className="font-normal leading-none opacity-70"
-              >
-                Name
-              </Typography>
-            </th>
-            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-              <Typography
-                variant="small"
-                color="blue-gray"
-                className="font-normal leading-none opacity-70"
-              >
-                Description
-              </Typography>
-            </th>
-            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-              <Typography
-                variant="small"
-                color="blue-gray"
-                className="font-normal leading-none opacity-70"
-              >
-                Price
-              </Typography>
-            </th>
-            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-              <Typography
-                variant="small"
-                color="blue-gray"
-                className="font-normal leading-none opacity-70"
-              >
-                Stock
-              </Typography>
-            </th>
-            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-              <Typography
-                variant="small"
-                color="blue-gray"
-                className="font-normal leading-none opacity-70"
-              >
-                Category
-              </Typography>
-            </th>
-            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-              <Typography
-                variant="small"
-                color="blue-gray"
-                className="font-normal leading-none opacity-70"
-              >
-                Unit
-              </Typography>
-            </th>
-            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-              <Typography
-                variant="small"
-                color="blue-gray"
-                className="font-normal leading-none opacity-70"
-              >
-                Material
-              </Typography>
-            </th>
-            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-              <Typography
-                variant="small"
-                color="blue-gray"
-                className="font-normal leading-none opacity-70"
-              >
-                Action
-              </Typography>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {loading ? (
+    <>
+      <Button className={"mb-4 rounded-md bg-deep-orange-200 px-2 py-1"}>
+        Add Product
+      </Button>
+      <Card className="overflow-x-auto">
+        <table className="min-w-full text-left">
+          <thead>
             <tr>
-              <td colSpan="9" className="p-4 text-center">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-normal"
+              {[
+                "ID",
+                "Name",
+                "Description",
+                "Price",
+                "Stock",
+                "Category",
+                "Unit",
+                "Material",
+                "Action",
+              ].map((header) => (
+                <th
+                  key={header}
+                  className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
                 >
-                  Loading...
-                </Typography>
-              </td>
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal leading-none opacity-70"
+                  >
+                    {header}
+                  </Typography>
+                </th>
+              ))}
             </tr>
-          ) : error ? (
-            <tr>
-              <td colSpan="9" className="p-4 text-center">
-                <Typography variant="small" color="red" className="font-normal">
-                  {error}
-                </Typography>
-              </td>
-            </tr>
-          ) : product.length === 0 ? (
-            <tr>
-              <td colSpan="9" className="p-4 text-center">
-                <Typography variant="small" color="red" className="font-normal">
-                  DATA KOSONG
-                </Typography>
-              </td>
-            </tr>
-          ) : (
-            product.map((item) => (
-              <tr key={item.productID}>
-                <td className="border-b border-blue-gray-50 p-4">
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan="9" className="p-4 text-center">
                   <Typography
                     variant="small"
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {item.productID || "N/A"} {/* Menambahkan fallback */}
+                    Loading...
                   </Typography>
-                </td>
-                <td className="whitespace-nowrap border-b border-blue-gray-50 p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {item.name || "N/A"} {/* Menambahkan fallback */}
-                  </Typography>
-                </td>
-                <td className="border-b border-blue-gray-50 p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {item.description || "N/A"} {/* Menambahkan fallback */}
-                  </Typography>
-                </td>
-                <td className="border-b border-blue-gray-50 p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {new Intl.NumberFormat("id-ID", {
-                      style: "currency",
-                      currency: "IDR",
-                    }).format(item.price) || "N/A"}{" "}
-                    {/* Menambahkan fallback */}
-                  </Typography>
-                </td>
-                <td className="border-b border-blue-gray-50 p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {item.stock || "N/A"} {/* Menambahkan fallback */}
-                  </Typography>
-                </td>
-                <td className="border-b border-blue-gray-50 p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {item.category || "N/A"} {/* Menambahkan fallback */}
-                  </Typography>
-                </td>
-                <td className="border-b border-blue-gray-50 p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {item.unit || "N/A"} {/* Menambahkan fallback */}
-                  </Typography>
-                </td>
-                <td className="border-b border-blue-gray-50 p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {item.material || "N/A"} {/* Menambahkan fallback */}
-                  </Typography>
-                </td>
-                <td className="flex gap-4 border-b border-blue-gray-50 p-4">
-                  <Button onClick={() => handleOpen(item)}>Edit</Button>
-                  <Button onClick={() => handleDeleteProduct(item.productID)}>
-                    Delete
-                  </Button>
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-      <div>
+            ) : error || products.length === 0 ? (
+              <tr>
+                <td colSpan="9" className="p-4 text-center">
+                  <Typography
+                    variant="small"
+                    color="red"
+                    className="font-normal"
+                  >
+                    DATA KOSONG
+                  </Typography>
+                </td>
+              </tr>
+            ) : (
+              products.map((item) =>
+                renderTableRow(item, handleOpen, handleDeleteProduct),
+              ) // Menggunakan fungsi dari utils
+            )}
+          </tbody>
+        </table>
         <UpdateProductModal
           open={open}
           handler={handleClose}
@@ -304,8 +163,8 @@ const TableProduct = () => {
           product={selectedProduct}
           onSubmit={handleUpdateProduct}
         />
-      </div>
-    </Card>
+      </Card>
+    </>
   );
 };
 
