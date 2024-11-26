@@ -15,7 +15,6 @@ const RegisterForm = () => {
   const [error, setError] = useState("");
 
   const validateEmail = (email) => {
-    // Regex untuk validasi format email
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   };

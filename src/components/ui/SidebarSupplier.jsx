@@ -59,16 +59,13 @@ export function SidebarSupplier() {
       </div>
       <List>
         <Link>
-          <ListItem className="ml-3 p-0">
+          <ListItem>
             <ListItemPrefix>
               <PresentationChartBarIcon className="h-5 w-5" />
             </ListItemPrefix>
             <Typography color="blue-gray" className="mr-auto font-normal">
               Dashboard
             </Typography>
-            <ListItemPrefix className="mr-5">
-              <ChevronRightIcon strokeWidth={2} className="h-5 w-5" />
-            </ListItemPrefix>
           </ListItem>
         </Link>
 
@@ -106,41 +103,11 @@ export function SidebarSupplier() {
                   Data Barang
                 </ListItem>
               </Link>
-              <Link to={"supplier"}>
-                <ListItem>
-                  <ListItemPrefix>
-                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                  </ListItemPrefix>
-                  Data Supplier
-                </ListItem>
-              </Link>
-              <Link to={"stackholder"}>
-                <ListItem>
-                  <ListItemPrefix>
-                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                  </ListItemPrefix>
-                  Data Stackholder
-                </ListItem>
-              </Link>
             </List>
           </AccordionBody>
         </Accordion>
         <hr className="my-2 border-blue-gray-50" />
-        <ListItem>
-          <ListItemPrefix>
-            <InboxIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Rak Penyimpanan
-          <ListItemSuffix>
-            <Chip
-              value="14"
-              size="sm"
-              variant="ghost"
-              color="blue-gray"
-              className="rounded-full"
-            />
-          </ListItemSuffix>
-        </ListItem>
+
         <ListItem>
           <ListItemPrefix>
             <GrTransaction className="h-5 w-5" />
