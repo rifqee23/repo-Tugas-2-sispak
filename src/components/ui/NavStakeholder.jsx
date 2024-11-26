@@ -43,7 +43,6 @@ export function NavStakeholder() {
           Pages
         </Link>
       </Typography>
-
       <Typography
         as="li"
         variant="small"

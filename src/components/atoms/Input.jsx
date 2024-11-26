@@ -5,7 +5,7 @@ const Input = ({
   onChange,
   id,
   placeholder = "",
-  className
+  className,
 }) => {
   return (
     <>
@@ -17,6 +17,7 @@ const Input = ({
         onChange={onChange}
         placeholder={placeholder}
         className={`${className}`}
+        readOnly={type === "id"}
       />
     </>
   );
