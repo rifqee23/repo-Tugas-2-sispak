@@ -9,6 +9,7 @@ import DashboardStakeholderPage from "./components/pages/DashboardStakeholderPag
 import DashboardSupplierPage from "./components/pages/DashboardSupplierPage";
 import StakeholderTransaction from "./components/pages/StakeholderTransaction";
 import StakeholderReportPage from "./components/pages/StakeholderReportPage";
+import ProductPage from "./components/pages/ProductPage";
 
 import AuthLayout from "./components/templates/AuthLayout";
 import StakeholderLayout from "./components/templates/StakeholderLayout";
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <DashboardSupplierPage />,
+      },
+      {
+        path: "product",
+        element: <ProductPage />,
       },
     ],
   },
