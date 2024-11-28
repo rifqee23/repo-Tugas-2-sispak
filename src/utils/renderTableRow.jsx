@@ -39,9 +39,7 @@ export const renderTableRow = (item, handleOpen, handleDeleteProduct) => {
       ))}
       <td className="flex gap-4 border-b border-blue-gray-50 p-4">
         <Button onClick={() => handleOpen(item)}>Edit</Button>
-        <Button onClick={() => handleDeleteProduct(item.productID)}>
-          Delete
-        </Button>
+        <Button onClick={() => handleDeleteProduct(productID)}>Delete</Button>
       </td>
     </tr>
   );
