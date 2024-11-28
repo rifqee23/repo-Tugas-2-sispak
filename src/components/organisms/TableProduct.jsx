@@ -4,6 +4,7 @@ import Button from "../atoms/Button";
 import axios from "axios";
 import Cookies from "js-cookie";
 import UpdateProductModal from "./updateProductModal";
+import AddProductModal from "./addProductModal";
 import { jwtDecode } from "jwt-decode";
 import { renderTableRow } from "@/utils/renderTableRow"; // Pastikan path ini benar
 
@@ -12,6 +13,7 @@ const TableProduct = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+  const [openAdd, setOpenAdd] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   const token = Cookies.get("access_token");
@@ -27,6 +29,14 @@ const TableProduct = () => {
   const handleClose = () => {
     setOpen(false);
     setSelectedProduct(null);
+  };
+
+  const handleOpenAdd = () => {
+    setOpenAdd(true);
+  };
+
+  const handleCloseAdd = () => {
+    setOpenAdd(false);
   };
 
   // Fungsi untuk menghapus produk
@@ -87,11 +97,31 @@ const TableProduct = () => {
     }
   };
 
-  console.log(products.length);
+  const handleAddProduct = async (newProduct) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/products",
+        newProduct,
+        {
+          headers: { Authorization: `${token}` },
+        },
+      );
+      setProducts((prev) => [...prev, response.data.data]);
+    } catch (error) {
+      setError("Error adding product: " + error.message);
+    } finally {
+      handleCloseAdd();
+    }
+  };
+
+  console.log(products);
 
   return (
     <>
-      <Button className={"mb-4 rounded-md bg-deep-orange-200 px-2 py-1"}>
+      <Button
+        onClick={handleOpenAdd}
+        className={"mb-4 rounded-md bg-deep-orange-200 px-2 py-1"}
+      >
         Add Product
       </Button>
       <Card className="overflow-x-auto">
@@ -156,6 +186,13 @@ const TableProduct = () => {
             )}
           </tbody>
         </table>
+
+        <AddProductModal
+          open={openAdd}
+          handler={handleCloseAdd}
+          onClick={handleCloseAdd}
+          onSubmit={handleAddProduct}
+        />
         <UpdateProductModal
           open={open}
           handler={handleClose}
