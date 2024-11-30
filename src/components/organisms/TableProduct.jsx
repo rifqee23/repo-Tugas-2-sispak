@@ -43,9 +43,12 @@ const TableProduct = () => {
   const handleDeleteProduct = async (productID) => {
     console.log("Deleting product with ID:", productID); // Log ID produk yang akan dihapus
     try {
-      await axios.delete(`http://localhost:3000/api/products/${productID}`, {
-        headers: { Authorization: `${token}` },
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/products/${productID}`,
+        {
+          headers: { Authorization: `${token}` },
+        },
+      );
       setProducts((prev) =>
         prev.filter((item) => item.productID !== productID),
       );
@@ -62,7 +65,7 @@ const TableProduct = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/products/user/${userId}`,
+          `${import.meta.env.VITE_API_URL}/api/products/user/${userId}`,
           { headers: { Authorization: `${token}` } },
         );
         setProducts(response.data.data);
@@ -79,7 +82,7 @@ const TableProduct = () => {
   const handleUpdateProduct = async (updatedProduct) => {
     try {
       await axios.put(
-        `http://localhost:3000/api/products/${selectedProduct.productID}`,
+        `${import.meta.env.VITE_API_URL}/api/products/${selectedProduct.productID}`,
         updatedProduct,
         { headers: { Authorization: `${token}` } },
       );
@@ -100,7 +103,7 @@ const TableProduct = () => {
   const handleAddProduct = async (newProduct) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/products",
+        `${import.meta.env.VITE_API_URL}/api/products`,
         newProduct,
         {
           headers: { Authorization: `${token}` },
