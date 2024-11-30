@@ -21,11 +21,14 @@ const TransactionForm = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("http://localhost:3000/api/products", {
-          headers: {
-            Authorization: `${token}`,
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/products`,
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
           },
-        });
+        );
         const responseData = response.data.data;
         // Menggunakan Set untuk menyaring nilai yang unik
         const uniqueSuppliers = new Set();
@@ -86,7 +89,7 @@ const TransactionForm = () => {
     setError("");
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/orders",
+        `${import.meta.env.VITE_API_URL}/api/orders`,
         {
           userID: Number(supplier),
           productID: Number(product),

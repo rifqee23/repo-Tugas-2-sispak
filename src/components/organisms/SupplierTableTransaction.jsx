@@ -1,69 +1,74 @@
 import React, { useState, useEffect } from "react";
 import { Card, Typography } from "@material-tailwind/react";
-import Button from "../atoms/Button";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Button from "../atoms/Button";
+import { jwtDecode } from "jwt-decode";
+import FormField from "../moleculs/FormField";
 
-const TableTransaction = () => {
+const SupplierTableTransaction = () => {
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   const token = Cookies.get("access_token");
+  const userId = jwtDecode(token).userID;
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/orders/my-orders`,
+          `${import.meta.env.VITE_API_URL}/api/orders`,
           {
             headers: {
               Authorization: `${token}`,
             },
           },
         );
+        const data = response.data.data;
 
-        setOrders(response.data.data);
+        const filteredOrders = data.filter(
+          (order) => order.product.userID === userId,
+        );
+        setOrders(filteredOrders);
       } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
+        console.error("Error fetching orders:", error);
       }
     };
+
     fetchOrders();
-  }, [token]);
+  }, [token, userId]);
 
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this order?",
-    );
-    if (!confirmDelete) return; // Jika tidak dikonfirmasi, keluar dari fungsi
+  const statusOptions = [
+    { value: "PENDING", label: "PENDING" },
+    { value: "ON_PROGRESS", label: "ON_PROGRESS" },
+    { value: "SUCCESS", label: "SUCCESS" },
+    { value: "REJECT", label: "REJECT" },
+  ];
 
+  const handleStatusChange = async (orderID, newStatus) => {
     try {
-      await axios.delete(`http://localhost:3000/api/orders/${id}`, {
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
-      // Memperbarui state untuk menghapus pesanan dari tampilan
+      console.log("orderID:", orderID);
+      console.log("newStatus:", newStatus);
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/orders/status`,
+        { orderID, status: newStatus },
+        { headers: { Authorization: `${token}` } },
+      );
+
       setOrders((prevOrders) => {
-        const updatedOrders = prevOrders.filter(
-          (order) => order.orderID !== id,
-        );
-        console.log("Updated Orders:", updatedOrders);
+        const updatedOrders = prevOrders.map((order) => {
+          if (order.orderID === orderID) {
+            return { ...order, status: newStatus };
+          }
+          return order;
+        });
         return updatedOrders;
       });
     } catch (error) {
-      console.error("Error deleting order:", error);
-      setError("Failed to delete the order. Please try again.");
+      console.error(error.message);
     }
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-
   return (
-    <Card className="h-full w-full overflow-scroll">
+    <Card className="h-full w-full overflow-visible">
       <table className="w-full min-w-max table-auto text-left">
         <thead>
           <tr>
@@ -74,6 +79,15 @@ const TableTransaction = () => {
                 className="font-normal leading-none opacity-70"
               >
                 ID
+              </Typography>
+            </th>
+            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+              <Typography
+                variant="small"
+                color="blue-gray"
+                className="font-normal leading-none opacity-70"
+              >
+                Name
               </Typography>
             </th>
             <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
@@ -141,6 +155,15 @@ const TableTransaction = () => {
                     color="blue-gray"
                     className="font-normal"
                   >
+                    {order.user.username}
+                  </Typography>
+                </td>
+                <td className="border-b border-blue-gray-50 p-4">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal"
+                  >
                     {order.product.name}
                   </Typography>
                 </td>
@@ -154,13 +177,16 @@ const TableTransaction = () => {
                   </Typography>
                 </td>
                 <td className="border-b border-blue-gray-50 p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {order.status}
-                  </Typography>
+                  <FormField
+                    id={"status"}
+                    type={"select"}
+                    name={"status"}
+                    value={order.status}
+                    options={statusOptions}
+                    onChange={(value) =>
+                      handleStatusChange(order.orderID, value)
+                    }
+                  />
                 </td>
                 <td className="border-b border-blue-gray-50 p-4">
                   <Button onClick={() => handleDelete(order.orderID)}>
@@ -176,4 +202,4 @@ const TableTransaction = () => {
   );
 };
 
-export default TableTransaction;
+export default SupplierTableTransaction;
