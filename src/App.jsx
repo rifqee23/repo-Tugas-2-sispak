@@ -15,6 +15,7 @@ import SupplierTransactionPage from "./components/pages/SupplierTransactionPage"
 import AuthLayout from "./components/templates/AuthLayout";
 import StakeholderLayout from "./components/templates/StakeholderLayout";
 import SupplierLayout from "./components/templates/SupplierLayout";
+import ReportProduct from "./components/pages/ReportProduct";
 
 const router = createBrowserRouter([
   {
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
       {
         path: "transaction",
         element: <SupplierTransactionPage />,
+      },
+      {
+        path: "report/:id",
+        element: <ReportProduct />,
       },
     ],
   },
