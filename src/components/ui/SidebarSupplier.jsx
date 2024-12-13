@@ -19,10 +19,13 @@ import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { AiFillDatabase } from "react-icons/ai";
 import { GrTransaction } from "react-icons/gr";
 import { HiDocumentReport } from "react-icons/hi";
+import { BsBoxSeam } from "react-icons/bs";
 import { Link } from "react-router-dom";
 
 import { useEffect } from "react";
 import useAuthStore from "@/utils/authStore";
+
+import logoZ4IN from '@/assets/logoZ4IN.png';
 
 export function SidebarSupplier() {
   const [open, setOpen] = React.useState(0);
@@ -50,20 +53,18 @@ export function SidebarSupplier() {
   return (
     <div
       id="sidebar"
-      className="fixed h-full w-full max-w-[20rem] bg-blue-200 p-4 shadow-xl shadow-blue-gray-900/5"
+      className="fixed h-full w-full max-w-[20rem] bg-HIJAU p-4 shadow-xl shadow-blue-gray-900/5 text-white flex flex-col items-center"
     >
-      <div className="mb-2 p-4">
-        <Typography variant="h5" color="blue-gray">
-          Supplier
-        </Typography>
+      <div className="mb-0 p-0 ">
+        <img src={logoZ4IN} alt="Logo Z4IN" style={{ width: "auto", height: "120px" }} className=""/>
       </div>
-      <List>
+      <List className="text-white">
         <Link>
           <ListItem>
             <ListItemPrefix>
               <PresentationChartBarIcon className="h-5 w-5" />
             </ListItemPrefix>
-            <Typography color="blue-gray" className="mr-auto font-normal">
+            <Typography  className="mr-auto font-normal ">
               Dashboard
             </Typography>
           </ListItem>
@@ -83,12 +84,12 @@ export function SidebarSupplier() {
           <ListItem className="p-0" selected={open === 2}>
             <AccordionHeader
               onClick={() => handleOpen(2)}
-              className="border-b-0 p-3"
+              className="border-b-5 p-3"
             >
               <ListItemPrefix>
-                <AiFillDatabase className="h-5 w-5" />
+                <AiFillDatabase className="h-5 w-5 text-white" />
               </ListItemPrefix>
-              <Typography color="blue-gray" className="mr-auto font-normal">
+              <Typography color="white" className="mr-auto font-normal">
                 Master Data
               </Typography>
             </AccordionHeader>
@@ -96,9 +97,9 @@ export function SidebarSupplier() {
           <AccordionBody className="py-1">
             <List className="p-0">
               <Link to={"product"}>
-                <ListItem>
+                <ListItem className="text-white">
                   <ListItemPrefix>
-                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                    <BsBoxSeam className="h-6 w-5 "/>
                   </ListItemPrefix>
                   Data Barang
                 </ListItem>
