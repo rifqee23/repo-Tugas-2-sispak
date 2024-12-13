@@ -80,11 +80,12 @@ const router = createBrowserRouter([
         path: "transaction",
         element: <SupplierTransactionPage />,
       },
-      {
-        path: "report/:id",
-        element: <ReportProduct />,
-      },
     ],
+  },
+
+  {
+    path: "report/:id",
+    element: <ReportProduct />,
   },
 ]);
 
