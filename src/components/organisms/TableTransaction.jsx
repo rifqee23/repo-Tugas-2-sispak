@@ -40,7 +40,7 @@ const TableTransaction = () => {
     if (!confirmDelete) return; // Jika tidak dikonfirmasi, keluar dari fungsi
 
     try {
-      await axios.delete(`http://localhost:3000/api/orders/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/orders/${id}`, {
         headers: {
           Authorization: `${token}`,
         },
@@ -61,6 +61,7 @@ const TableTransaction = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
+  console.log(orders);
 
   return (
     <Card className="h-full w-full overflow-scroll">
@@ -101,6 +102,15 @@ const TableTransaction = () => {
                 className="font-normal leading-none opacity-70"
               >
                 Status
+              </Typography>
+            </th>
+            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+              <Typography
+                variant="small"
+                color="blue-gray"
+                className="font-normal leading-none opacity-70"
+              >
+                QR Code
               </Typography>
             </th>
             <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
@@ -162,6 +172,24 @@ const TableTransaction = () => {
                     {order.status}
                   </Typography>
                 </td>
+                <td className="border-b border-blue-gray-50 p-4">
+                  {order.qr_code ? (
+                    <img
+                      src={`${import.meta.env.VITE_API_URL}${order.qr_code}`}
+                      alt=""
+                      className="h-12 w-12"
+                    />
+                  ) : (
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      -
+                    </Typography>
+                  )}
+                </td>
+
                 <td className="border-b border-blue-gray-50 p-4">
                   <Button onClick={() => handleDelete(order.orderID)}>
                     Delete

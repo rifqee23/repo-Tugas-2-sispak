@@ -123,6 +123,15 @@ const SupplierTableTransaction = () => {
                 color="blue-gray"
                 className="font-normal leading-none opacity-70"
               >
+                QR Code
+              </Typography>
+            </th>
+            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+              <Typography
+                variant="small"
+                color="blue-gray"
+                className="font-normal leading-none opacity-70"
+              >
                 Action
               </Typography>
             </th>
@@ -187,6 +196,23 @@ const SupplierTableTransaction = () => {
                       handleStatusChange(order.orderID, value)
                     }
                   />
+                </td>
+                <td className="border-b border-blue-gray-50 p-4">
+                  {order.qr_code ? (
+                    <img
+                      src={`${import.meta.env.VITE_API_URL}${order.qr_code}`}
+                      alt=""
+                      className="h-12 w-12"
+                    />
+                  ) : (
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      -
+                    </Typography>
+                  )}
                 </td>
                 <td className="border-b border-blue-gray-50 p-4">
                   <Button onClick={() => handleDelete(order.orderID)}>
