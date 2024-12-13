@@ -109,12 +109,14 @@ export function SidebarSupplier() {
         </Accordion>
         <hr className="my-2 border-blue-gray-50" />
 
-        <ListItem>
-          <ListItemPrefix>
-            <GrTransaction className="h-5 w-5" />
-          </ListItemPrefix>
-          Transaksi
-        </ListItem>
+        <Link to={"transaction"}>
+          <ListItem>
+            <ListItemPrefix>
+              <GrTransaction className="h-5 w-5" />
+            </ListItemPrefix>
+            Transaksi
+          </ListItem>
+        </Link>
         <ListItem>
           <ListItemPrefix>
             <HiDocumentReport className="h-5 w-5" />
