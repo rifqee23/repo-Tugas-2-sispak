@@ -70,7 +70,7 @@ const LoginForm = () => {
         setError(error.response.data.error || "Login Failed");
         console.log(error.response.data.error);
       } else {
-        setError("Login failed. Please try again later.");
+        setError(error.message || "Login failed. Please try again later.");
       }
     }
   };

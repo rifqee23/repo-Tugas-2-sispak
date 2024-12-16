@@ -17,6 +17,9 @@ import StakeholderLayout from "./components/templates/StakeholderLayout";
 import SupplierLayout from "./components/templates/SupplierLayout";
 import ReportProduct from "./components/pages/ReportProduct";
 
+import ProtectedRoute from "./utils/ProtectedRoute";
+import PublicRoute from "./utils/PublicRoute";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -28,11 +31,19 @@ const router = createBrowserRouter([
       },
       {
         path: "login",
-        element: <LoginPage />,
+        element: (
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
+        ),
       },
       {
         path: "register",
-        element: <RegisterPage />,
+        element: (
+          <PublicRoute>
+            <RegisterPage />
+          </PublicRoute>
+        ),
       },
     ],
   },
@@ -47,15 +58,27 @@ const router = createBrowserRouter([
       },
       {
         path: "dashboard",
-        element: <DashboardStakeholderPage />,
+        element: (
+          <ProtectedRoute>
+            <DashboardStakeholderPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "transaction",
-        element: <StakeholderTransaction />,
+        element: (
+          <ProtectedRoute>
+            <StakeholderTransaction />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "report",
-        element: <StakeholderReportPage />,
+        element: (
+          <ProtectedRoute>
+            <StakeholderReportPage />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
@@ -70,22 +93,38 @@ const router = createBrowserRouter([
       },
       {
         path: "dashboard",
-        element: <DashboardSupplierPage />,
+        element: (
+          <ProtectedRoute>
+            <DashboardSupplierPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "product",
-        element: <ProductPage />,
+        element: (
+          <ProtectedRoute>
+            <ProductPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "transaction",
-        element: <SupplierTransactionPage />,
+        element: (
+          <ProtectedRoute>
+            <SupplierTransactionPage />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
 
   {
     path: "report/:id",
-    element: <ReportProduct />,
+    element: (
+      <ProtectedRoute>
+        <ReportProduct />
+      </ProtectedRoute>
+    ),
   },
 ]);
 

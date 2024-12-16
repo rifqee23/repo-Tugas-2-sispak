@@ -37,11 +37,14 @@ const DashboardStakeholderPage = () => {
     };
     const fetchDataSupplier = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/products", {
-          headers: {
-            Authorization: `${token}`,
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/products`,
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
           },
-        });
+        );
         const uniqueSuppliers = new Set();
         response.data.data.forEach((product) => {
           uniqueSuppliers.add(product.supplier.username);
@@ -56,11 +59,14 @@ const DashboardStakeholderPage = () => {
     };
     const fetchDataProduct = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/products", {
-          headers: {
-            Authorization: `${token}`,
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/products`,
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
           },
-        });
+        );
 
         setProduct(response.data.data);
       } catch (error) {
