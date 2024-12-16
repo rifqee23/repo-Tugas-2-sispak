@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 const useAuthStore = create((set) => ({
   isAuthenticated: !!Cookies.get("access_token"),
@@ -11,6 +12,11 @@ const useAuthStore = create((set) => ({
   logoutUser: () => {
     Cookies.remove("access_token");
     set({ isAuthenticated: false });
+  },
+  getToken: () => {
+    const token = Cookies.get("access_token");
+
+    return token;
   },
 }));
 
