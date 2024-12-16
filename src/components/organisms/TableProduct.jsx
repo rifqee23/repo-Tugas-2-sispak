@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import UpdateProductModal from "./updateProductModal";
 import AddProductModal from "./addProductModal";
 import { jwtDecode } from "jwt-decode";
-import { renderTableRow } from "@/utils/renderTableRow"; // Pastikan path ini benar
+import { renderTableRow } from "@/utils/renderTableRow";
 
 const TableProduct = () => {
   const [products, setProducts] = useState([]);
@@ -17,7 +17,7 @@ const TableProduct = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   const token = Cookies.get("access_token");
-  const userId = jwtDecode(token).userID; // Dekode token untuk mendapatkan userID
+  const userId = jwtDecode(token).userID;
 
   // Fungsi untuk membuka modal dan mengatur produk yang dipilih
   const handleOpen = (product) => {
