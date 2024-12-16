@@ -25,12 +25,6 @@ import { useEffect } from "react";
 import useAuthStore from "@/utils/authStore";
 
 export function SidebarStakeHolder() {
-  const [open, setOpen] = React.useState(0);
-
-  const handleOpen = (value) => {
-    setOpen(open === value ? 0 : value);
-  };
-
   useEffect(() => {
     const sidebar = document.getElementById("sidebar");
 

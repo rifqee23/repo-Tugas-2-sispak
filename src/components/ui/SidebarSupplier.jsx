@@ -25,7 +25,7 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import useAuthStore from "@/utils/authStore";
 
-import logoZ4IN from '@/assets/logoZ4IN.png';
+import logoZ4IN from "@/assets/logoZ4IN.png";
 
 export function SidebarSupplier() {
   const [open, setOpen] = React.useState(0);
@@ -53,10 +53,15 @@ export function SidebarSupplier() {
   return (
     <div
       id="sidebar"
-      className="fixed h-full w-full max-w-[20rem] bg-HIJAU p-4 shadow-xl shadow-blue-gray-900/5 text-white flex flex-col items-center"
+      className="fixed flex h-full w-full max-w-[20rem] flex-col items-center bg-HIJAU p-4 text-white shadow-xl shadow-blue-gray-900/5"
     >
-      <div className="mb-0 p-0 ">
-        <img src={logoZ4IN} alt="Logo Z4IN" style={{ width: "auto", height: "120px" }} className=""/>
+      <div className="mb-0 p-0">
+        <img
+          src={logoZ4IN}
+          alt="Logo Z4IN"
+          style={{ width: "auto", height: "120px" }}
+          className=""
+        />
       </div>
       <List className="text-white">
         <Link>
@@ -64,9 +69,7 @@ export function SidebarSupplier() {
             <ListItemPrefix>
               <PresentationChartBarIcon className="h-5 w-5" />
             </ListItemPrefix>
-            <Typography  className="mr-auto font-normal ">
-              Dashboard
-            </Typography>
+            <Typography className="mr-auto font-normal">Dashboard</Typography>
           </ListItem>
         </Link>
 
@@ -99,7 +102,7 @@ export function SidebarSupplier() {
               <Link to={"product"}>
                 <ListItem className="text-white">
                   <ListItemPrefix>
-                    <BsBoxSeam className="h-6 w-5 "/>
+                    <BsBoxSeam className="h-6 w-5" />
                   </ListItemPrefix>
                   Data Barang
                 </ListItem>
@@ -117,12 +120,7 @@ export function SidebarSupplier() {
             Transaksi
           </ListItem>
         </Link>
-        <ListItem>
-          <ListItemPrefix>
-            <HiDocumentReport className="h-5 w-5" />
-          </ListItemPrefix>
-          Laporan
-        </ListItem>
+
         <Link to={"/login"} onClick={logoutUser}>
           <ListItem>
             <ListItemPrefix>

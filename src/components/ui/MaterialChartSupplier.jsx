@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardBody } from "@material-tailwind/react";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Typography,
+} from "@material-tailwind/react";
+import { Square3Stack3DIcon } from "@heroicons/react/24/outline";
 import Chart from "react-apexcharts";
 import axios from "axios";
-import Cookies from "js-cookie";
+import useAuthStore from "@/utils/authStore";
 
-const MaterialChart = () => {
+const MaterialChartSupplier = () => {
   const [transactions, setTransactions] = useState({
     Apr: 0,
     May: 0,
@@ -19,13 +25,16 @@ const MaterialChart = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      const token = Cookies.get("access_token");
       try {
+        const token = useAuthStore.getState().getToken();
+        console.log(token);
+
         const response = await axios.get(
-          `{import.meta.env.VITE_API_URL}/api/orders/my-orders`,
+          `${import.meta.env.VITE_API_URL}/api/orders/history`,
           {
             headers: {
               Authorization: `${token}`,
+              "Content-Type": "application/json",
             },
           },
         );
@@ -155,7 +164,22 @@ const MaterialChart = () => {
   };
 
   return (
-    <Card>
+    <Card className="mb-6">
+      <CardHeader
+        floated={false}
+        shadow={false}
+        color="transparent"
+        className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
+      >
+        <div className="w-max rounded-lg bg-gray-900 p-5 text-white">
+          <Square3Stack3DIcon className="h-6 w-6" />
+        </div>
+        <div>
+          <Typography variant="h6" color="blue-gray">
+            Statistik Performa Transaksi Sukses
+          </Typography>
+        </div>
+      </CardHeader>
       <CardBody className="px-2 pb-0">
         <Chart {...chartConfig} />
       </CardBody>
@@ -163,4 +187,4 @@ const MaterialChart = () => {
   );
 };
 
-export default MaterialChart;
+export default MaterialChartSupplier;
