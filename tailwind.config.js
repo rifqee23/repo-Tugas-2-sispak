@@ -1,12 +1,13 @@
 /** @type {import('tailwindcss').Config} */
-const withMT = require("@material-tailwind/react/utils/withMT");
+import withMT from "@material-tailwind/react/utils/withMT";
+
 export default withMT({
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
-        'HIJAU': '#006A67',
-        'BIRU' : '#26355D',
+        HIJAU: "#006A67",
+        BIRU: "#26355D",
       },
     },
   },
