@@ -3,8 +3,8 @@ import { Card, Typography } from "@material-tailwind/react";
 import Button from "../atoms/Button";
 import axios from "axios";
 import Cookies from "js-cookie";
-import UpdateProductModal from "./updateProductModal";
-import AddProductModal from "./addProductModal";
+import UpdateProductModal from "./UpdateProductModal";
+import AddProductModal from "./AddProductModal";
 import { jwtDecode } from "jwt-decode";
 import { renderTableRow } from "@/utils/renderTableRow";
 
