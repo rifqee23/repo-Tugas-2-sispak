@@ -1,5 +1,5 @@
 import React from "react";
-import TableTransaction from "../organisms/tableTransaction";
+import TableTransaction from "../organisms/tableTransaction.jsx";
 const StakeholderReportPage = () => {
   return (
     <div className="flex h-screen items-center justify-center">
