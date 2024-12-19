@@ -182,8 +182,8 @@ const SupplierTableTransaction = () => {
                       name={"status"}
                       value={order.status}
                       options={statusOptions}
-                      onChange={(value) =>
-                        handleStatusChange(order.orderID, value)
+                      onChange={(event) =>
+                        handleStatusChange(order.orderID, event.target.value)
                       }
                       classNameSelect="w-full"
                     />

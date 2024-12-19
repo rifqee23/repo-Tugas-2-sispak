@@ -111,6 +111,14 @@ const UpdateProductModal = ({ open, handler, onClick, onSubmit }) => {
     { value: "PACK", label: "PACK" },
   ];
 
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="h-32 w-32 animate-spin rounded-full border-t-4 border-blue-500"></div>
+      </div>
+    );
+  }
+
   return (
     <Dialog open={open} handler={handler}>
       <DialogHeader>Edit Product</DialogHeader>
@@ -176,7 +184,7 @@ const UpdateProductModal = ({ open, handler, onClick, onSubmit }) => {
             label={"Category"}
             value={category}
             options={categoryOptions}
-            onChange={(value) => setCategory(value)}
+            onChange={(event) => setCategory(event.target.value)}
             classNameLabel={"block text-sm font-medium text-gray-900"}
           />
           <FormField
@@ -186,7 +194,7 @@ const UpdateProductModal = ({ open, handler, onClick, onSubmit }) => {
             label={"Unit"}
             value={unit}
             options={unitOptions}
-            onChange={(value) => setUnit(value)}
+            onChange={(event) => setUnit(event.target.value)}
             classNameLabel={"block text-sm font-medium text-gray-900"}
           />
           <FormField
