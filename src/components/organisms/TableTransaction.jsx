@@ -174,11 +174,7 @@ const TableTransaction = () => {
                 </td>
                 <td className="border-b border-blue-gray-50 p-4">
                   {order.qr_code ? (
-                    <img
-                      src={`${import.meta.env.VITE_API_URL}${order.qr_code}`}
-                      alt=""
-                      className="h-12 w-12"
-                    />
+                    <img src={order.qr_code} alt="" className="h-12 w-12" />
                   ) : (
                     <Typography
                       variant="small"
