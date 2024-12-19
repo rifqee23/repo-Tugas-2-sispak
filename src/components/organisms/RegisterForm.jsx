@@ -120,7 +120,7 @@ const RegisterForm = () => {
           label={"Role"}
           value={role}
           options={roleOptions}
-          onChange={(value) => setRole(value)}
+          onChange={(event) => setRole(event.target.value)}
           classNameLabel={"block text-sm font-medium text-gray-900 inline-flex"}
         />
 

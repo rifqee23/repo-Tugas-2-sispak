@@ -3,7 +3,6 @@ import FormField from "../moleculs/FormField"; // Pastikan jalur ini benar
 import Button from "../atoms/Button"; // Pastikan jalur ini benar
 import Cookies from "js-cookie";
 import { Typography } from "@material-tailwind/react";
-import axios from "axios";
 import axiosInstance from "@/axiosInstance";
 
 const TransactionForm = () => {
@@ -108,6 +107,8 @@ const TransactionForm = () => {
     }
   };
 
+  console.log(supplier);
+
   return (
     <form onSubmit={handleSubmit}>
       {error && (
@@ -125,8 +126,8 @@ const TransactionForm = () => {
             name="transactionName"
             options={supplierOptions}
             value={supplier}
-            onChange={(value) => {
-              setSupplier(value);
+            onChange={(event) => {
+              setSupplier(event.target.value);
               setProduct("");
             }}
             classNameLabel={"block text-sm font-medium text-gray-900 mt-2"}
@@ -137,8 +138,8 @@ const TransactionForm = () => {
             name="transactionName"
             options={productOptions}
             value={product}
-            onChange={(value) => {
-              setProduct(value);
+            onChange={(event) => {
+              setProduct(event.target.value);
             }}
             disabled={loadingProducts}
             classNameLabel={"block text-sm font-medium text-gray-900 mt-2"}
