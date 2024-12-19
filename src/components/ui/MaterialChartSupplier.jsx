@@ -9,6 +9,7 @@ import { Square3Stack3DIcon } from "@heroicons/react/24/outline";
 import Chart from "react-apexcharts";
 import axios from "axios";
 import useAuthStore from "@/utils/authStore";
+import axiosInstance from "@/axiosInstance";
 
 const MaterialChartSupplier = () => {
   const [transactions, setTransactions] = useState({
@@ -27,17 +28,13 @@ const MaterialChartSupplier = () => {
     const fetchOrders = async () => {
       try {
         const token = useAuthStore.getState().getToken();
-        console.log(token);
 
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/orders/history`,
-          {
-            headers: {
-              Authorization: `${token}`,
-              "Content-Type": "application/json",
-            },
+        const response = await axiosInstance.get(`/api/orders/history`, {
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
           },
-        );
+        });
 
         const orders = response.data.data;
         countTransactions(orders);

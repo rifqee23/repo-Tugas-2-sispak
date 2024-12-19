@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   return (
-    <div className="flex h-screen w-screen items-center justify-center bg-blue-gray-800">
+    <div className="flex h-screen w-screen items-center justify-center bg-blue-gray-800 p-4">
       <Card className="mt-4 h-auto w-96">
         <CardBody>
           <Typography color="blue-gray" variant="h5" className="mb-5">

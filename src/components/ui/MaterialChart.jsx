@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardBody } from "@material-tailwind/react";
 import Chart from "react-apexcharts";
-import axios from "axios";
 import Cookies from "js-cookie";
+import axiosInstance from "@/axiosInstance";
 
 const MaterialChart = () => {
   const [transactions, setTransactions] = useState({
@@ -21,16 +21,14 @@ const MaterialChart = () => {
     const fetchOrders = async () => {
       const token = Cookies.get("access_token");
       try {
-        const response = await axios.get(
-          `{import.meta.env.VITE_API_URL}/api/orders/my-orders`,
-          {
-            headers: {
-              Authorization: `${token}`,
-            },
+        const response = await axiosInstance.get(`/api/orders/my-orders`, {
+          headers: {
+            Authorization: `${token}`,
           },
-        );
+        });
 
         const orders = response.data.data;
+
         countTransactions(orders);
       } catch (error) {
         console.error("Error fetching orders:", error);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Navbar,
   Typography,
@@ -13,66 +13,86 @@ import {
 import { Collapse } from "@material-tailwind/react";
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
+
+import useAuthStore from "@/utils/authStore";
+
+import { jwtDecode } from "jwt-decode";
 
 export function NavStakeholder() {
-  const [openNav, setOpenNav] = React.useState(false);
+  const [openNav, setOpenNav] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.addEventListener(
       "resize",
       () => window.innerWidth >= 960 && setOpenNav(false),
     );
   }, []);
 
-  const [open, setOpen] = React.useState(0);
+  const [open, setOpen] = useState(0);
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
 
+  const { getToken, logoutUser } = useAuthStore();
+
+  const token = getToken();
+  const decodedToken = jwtDecode(token);
+
+  const username = decodedToken.username;
+  const email = decodedToken.email;
+
   const navList = (
-    <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <Link to={"/"} className="flex items-center">
-          Pages
+    <ul className="mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+      <Typography as="li" color="blue-gray" className="font-semibold">
+        <NavLink
+          to={"/stakeholder/dashboard"}
+          className={({ isActive }) =>
+            isActive
+              ? "flex items-center rounded-lg bg-blue-gray-200"
+              : "flex items-center"
+          }
+        >
+          <ListItem className="focus:bg-inherit">Dashboard</ListItem>
+        </NavLink>
+      </Typography>
+
+      <Typography as="li" color="blue-gray" className="font-semibold">
+        <NavLink
+          to={"/stakeholder/transaction"}
+          className={({ isActive }) =>
+            isActive
+              ? "flex items-center rounded-lg bg-blue-gray-200"
+              : "flex items-center"
+          }
+        >
+          <ListItem className="focus:bg-inherit">Transaksi</ListItem>
+        </NavLink>
+      </Typography>
+
+      <Typography as="li" color="blue-gray" className="font-semibold">
+        <NavLink
+          to={"/stakeholder/report"}
+          className={({ isActive }) =>
+            isActive
+              ? "flex items-center rounded-lg bg-blue-gray-200"
+              : "flex items-center"
+          }
+        >
+          <ListItem className="focus:bg-inherit">Laporan</ListItem>
+        </NavLink>
+      </Typography>
+
+      <div className="flex items-center gap-x-1">
+        <Link
+          className="w-full rounded-md bg-blue-gray-900 py-1 text-center"
+          to={"/login"}
+          onClick={logoutUser}
+        >
+          <span>Log out</span>
         </Link>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <a href="#" className="flex items-center">
-          Rak Penyimpanan
-        </a>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <a href="#" className="flex items-center">
-          Transaksi
-        </a>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <a href="#" className="flex items-center">
-          Laporan
-        </a>
-      </Typography>
+      </div>
     </ul>
   );
 
@@ -80,13 +100,12 @@ export function NavStakeholder() {
     <div className="">
       <Navbar className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 py-2">
         <div className="flex items-center justify-between text-blue-gray-900">
-          <Typography
-            as="a"
-            href="#"
-            className="mr-4 cursor-pointer py-1.5 font-medium"
-          >
-            Material Tailwind
-          </Typography>
+          <Link to={"/"}>
+            <Typography className="mr-4 cursor-pointer py-1.5 font-bold">
+              Z4IN
+            </Typography>
+          </Link>
+
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>
             <div className="flex items-center gap-x-1">
@@ -107,7 +126,7 @@ export function NavStakeholder() {
             </div>
             <IconButton
               variant="text"
-              className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
+              className="ml-auto h-6 w-6 text-inherit focus:bg-transparent active:bg-transparent lg:hidden"
               ripple={false}
               onClick={() => setOpenNav(!openNav)}
             >
@@ -145,15 +164,15 @@ export function NavStakeholder() {
           </div>
         </div>
         <Collapse open={openNav}>
-          {navList}
-          <div className="flex items-center gap-x-1">
-            <Button fullWidth variant="text" size="sm" className="">
-              <span>Log In</span>
-            </Button>
-            <Button fullWidth variant="gradient" size="sm" className="">
-              <span>Sign in</span>
-            </Button>
+          <div className="flex items-center justify-between gap-4 text-blue-gray-900">
+            <Typography className="mr-4 cursor-pointer py-1.5 font-medium">
+              {username}
+            </Typography>
+            <Typography className="mr-4 cursor-pointer py-1.5 font-medium">
+              {email}
+            </Typography>
           </div>
+          {navList}
         </Collapse>
       </Navbar>
     </div>

@@ -20,7 +20,7 @@ const MaterialPie = () => {
   const [labels, setLabels] = useState([]);
 
   useEffect(() => {
-    fetchHistory(`${import.meta.env.VITE_API_URL}/api/orders/history`);
+    fetchHistory(`/api/orders/history`);
   }, [fetchHistory]);
 
   useEffect(() => {

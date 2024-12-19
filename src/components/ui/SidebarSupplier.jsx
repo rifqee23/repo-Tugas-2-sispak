@@ -10,15 +10,10 @@ import {
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
-import {
-  PresentationChartBarIcon,
-  InboxIcon,
-  PowerIcon,
-} from "@heroicons/react/24/solid";
-import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
+import { PresentationChartBarIcon, PowerIcon } from "@heroicons/react/24/solid";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { AiFillDatabase } from "react-icons/ai";
 import { GrTransaction } from "react-icons/gr";
-import { HiDocumentReport } from "react-icons/hi";
 import { BsBoxSeam } from "react-icons/bs";
 import { Link } from "react-router-dom";
 
@@ -84,19 +79,23 @@ export function SidebarSupplier() {
             />
           }
         >
-          <ListItem className="p-0" selected={open === 2}>
+          <ListItem
+            className="group bg-transparent p-0 hover:text-black"
+            selected={open === 2}
+          >
             <AccordionHeader
               onClick={() => handleOpen(2)}
               className="border-b-5 p-3"
             >
               <ListItemPrefix>
-                <AiFillDatabase className="h-5 w-5 text-white" />
+                <AiFillDatabase className="h-5 w-5 text-white group-hover:text-black" />
               </ListItemPrefix>
-              <Typography color="white" className="mr-auto font-normal">
+              <Typography className="w-full font-normal text-white group-hover:text-black">
                 Master Data
               </Typography>
             </AccordionHeader>
           </ListItem>
+
           <AccordionBody className="py-1">
             <List className="p-0">
               <Link to={"product"}>

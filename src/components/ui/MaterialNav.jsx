@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Navbar,
-  Typography,
-  Button,
-  IconButton,
-} from "@material-tailwind/react";
+import { Navbar, Typography, IconButton } from "@material-tailwind/react";
 import { Collapse } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 
@@ -29,10 +24,10 @@ export function MaterialNav() {
           Z4IN
         </Typography>
         <div className="flex items-center gap-x-1">
-          <Link to={"/login"}>
+          <Link className="hidden lg:inline-block" to={"/login"}>
             <span>Log In</span>
           </Link>
-          <Link to={"/register"}>
+          <Link className="hidden lg:inline-block" to={"/register"}>
             <span>Sign in</span>
           </Link>
         </div>
@@ -76,12 +71,12 @@ export function MaterialNav() {
       </div>
       <Collapse open={openNav}>
         <div className="container mx-auto">
-          <div className="flex items-center gap-x-1">
+          <div className="flex items-center gap-x-4">
             <Link to={"/login"}>
-              <span>Log In</span>
+              <Typography color="blue-gray">Log In</Typography>
             </Link>
             <Link to={"/register"}>
-              <span>Sign in</span>
+              <Typography color="blue-gray">Sign in</Typography>
             </Link>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import axios from "axios";
 import useAuthStore from "@/utils/authStore";
+import axiosInstance from "@/axiosInstance";
 
 const useStore = create((set) => ({
   order: null,
@@ -20,7 +20,7 @@ const useStore = create((set) => ({
     set({ loading: true, error: null });
     try {
       const token = useAuthStore.getState().getToken();
-      const res = await axios.get(url, {
+      const res = await axiosInstance.get(url, {
         headers: {
           Authorization: `${token}`,
         },
