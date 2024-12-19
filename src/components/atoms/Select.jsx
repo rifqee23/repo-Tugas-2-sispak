@@ -1,7 +1,7 @@
 import React from "react";
 import { Select, Option } from "@material-tailwind/react";
 
-const SelectOption = ({ name, value, onChange, options, id, className }) => {
+const Select = ({ name, value, onChange, options, id, className }) => {
   return (
     <>
       <Select
@@ -22,4 +22,4 @@ const SelectOption = ({ name, value, onChange, options, id, className }) => {
   );
 };
 
-export default SelectOption;
+export default Select;
