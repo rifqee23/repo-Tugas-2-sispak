@@ -41,8 +41,6 @@ const SupplierTableTransaction = () => {
 
   const handleStatusChange = async (orderID, newStatus) => {
     try {
-      console.log("orderID:", orderID);
-      console.log("newStatus:", newStatus);
       await axiosInstance.put(
         `/api/orders/status`,
         { orderID, status: newStatus },
@@ -187,6 +185,7 @@ const SupplierTableTransaction = () => {
                       onChange={(value) =>
                         handleStatusChange(order.orderID, value)
                       }
+                      classNameSelect="w-full"
                     />
                   </td>
                   <td className="border-b border-blue-gray-50 p-4">
