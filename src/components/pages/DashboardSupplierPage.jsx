@@ -73,7 +73,7 @@ const DashboardSupplierPage = () => {
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>Error: {error.message || "Terjadi kesalahan"}</div>;
   }
 
   return (
@@ -113,7 +113,9 @@ const DashboardSupplierPage = () => {
               </div>
               <div className="flex justify-center">
                 <h3 className="text-slate-600 text-7xl font-light leading-normal">
-                  {product?.map((item) => item.stock).reduce((a, b) => a + b)}
+                  {product
+                    ?.map((item) => item.stock)
+                    .reduce((a, b) => a + b, 0)}
                 </h3>
               </div>
             </div>
