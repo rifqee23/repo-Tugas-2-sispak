@@ -4,6 +4,7 @@ import Button from "../atoms/Button";
 import axios from "axios";
 import { ModalRegistrasi } from "../ui/MaterialModal";
 import { Typography } from "@material-tailwind/react";
+import axiosInstance from "@/axiosInstance";
 
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
@@ -51,15 +52,12 @@ const RegisterForm = () => {
     }
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/register`,
-        {
-          username,
-          email,
-          password,
-          role,
-        },
-      );
+      const response = await axiosInstance.post(`/api/auth/register`, {
+        username,
+        email,
+        password,
+        role,
+      });
 
       {
         response.data.message === "Register successfully" && setShowModal(true);
@@ -94,7 +92,9 @@ const RegisterForm = () => {
           label={"Username"}
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          classNameLabel={"block text-sm font-medium text-gray-900"}
+          classNameLabel={
+            "block text-sm font-medium text-gray-900  inline-flex"
+          }
           classNameInput={
             "bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           }
@@ -107,7 +107,7 @@ const RegisterForm = () => {
           label={"Email"}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          classNameLabel={"block text-sm font-medium text-gray-900"}
+          classNameLabel={"block text-sm font-medium text-gray-900 inline-flex"}
           classNameInput={
             "bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           }
@@ -121,7 +121,7 @@ const RegisterForm = () => {
           value={role}
           options={roleOptions}
           onChange={(value) => setRole(value)}
-          classNameLabel={"block text-sm font-medium text-gray-900"}
+          classNameLabel={"block text-sm font-medium text-gray-900 inline-flex"}
         />
 
         <FormField
@@ -131,22 +131,22 @@ const RegisterForm = () => {
           label={"Password"}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          classNameLabel={"block text-sm font-medium text-gray-900"}
+          classNameLabel={"block text-sm font-medium text-gray-900 inline-flex"}
           classNameInput={
-            "bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            "text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           }
         />
 
         <FormField
           id={"confirmPassword"}
-          type={"password"}
+          type={"confirmPassword"}
           name={"confirmPassword"}
           label={"Confirm Password"}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          classNameLabel={"block text-sm font-medium text-gray-900"}
+          classNameLabel={"block text-sm font-medium text-gray-900 inline-flex"}
           classNameInput={
-            "bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            "text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           }
         />
 

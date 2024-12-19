@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { GrTransaction } from "react-icons/gr";
 import { MdLocalShipping, MdStore } from "react-icons/md";
-import { FaHandHoldingUsd } from "react-icons/fa";
 import Cookies from "js-cookie";
-import axios from "axios";
+import axiosInstance from "@/axiosInstance";
 
 import MaterialChart from "@/components/ui/MaterialChart";
 
@@ -19,14 +18,11 @@ const DashboardStakeholderPage = () => {
   useEffect(() => {
     const fetchDataTransaction = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/orders/my-orders`,
-          {
-            headers: {
-              Authorization: `${token}`,
-            },
+        const response = await axiosInstance.get(`/api/orders/my-orders`, {
+          headers: {
+            Authorization: `${token}`,
           },
-        );
+        });
         setOrder(response.data.data);
       } catch (error) {
         setError(error.message);
@@ -37,14 +33,11 @@ const DashboardStakeholderPage = () => {
     };
     const fetchDataSupplier = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/products`,
-          {
-            headers: {
-              Authorization: `${token}`,
-            },
+        const response = await axiosInstance.get(`/api/products`, {
+          headers: {
+            Authorization: `${token}`,
           },
-        );
+        });
         const uniqueSuppliers = new Set();
         response.data.data.forEach((product) => {
           uniqueSuppliers.add(product.supplier.username);
@@ -59,14 +52,11 @@ const DashboardStakeholderPage = () => {
     };
     const fetchDataProduct = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/products`,
-          {
-            headers: {
-              Authorization: `${token}`,
-            },
+        const response = await axiosInstance.get(`/api/products`, {
+          headers: {
+            Authorization: `${token}`,
           },
-        );
+        });
 
         setProduct(response.data.data);
       } catch (error) {
@@ -80,9 +70,21 @@ const DashboardStakeholderPage = () => {
     fetchDataProduct();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="h-32 w-32 animate-spin rounded-full border-t-4 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
-    <div className="mt-20 h-screen p-8">
-      <h3 className="text-2xl font-semibold">Dashboard</h3>
+    <div className="min-h-screen p-8 lg:mt-20">
+      <h3 className="mb-2 text-2xl font-semibold">Dashboard</h3>
 
       {/* Card Start */}
       <div className="mb-2 flex flex-col items-center justify-center gap-4 lg:flex-row">
@@ -145,7 +147,7 @@ const DashboardStakeholderPage = () => {
       </div>
       {/* Card End */}
 
-      <h3 className="mt-5 text-2xl font-semibold">Statistik Performa</h3>
+      <h3 className="mb-4 mt-5 text-2xl font-semibold">Statistik Performa</h3>
       <MaterialChart />
     </div>
   );

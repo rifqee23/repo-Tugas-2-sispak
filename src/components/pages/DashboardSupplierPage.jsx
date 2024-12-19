@@ -4,8 +4,10 @@ import useStoreProduct from "@/stores/ProductStore";
 import useAuthStore from "@/utils/authStore";
 import { jwtDecode } from "jwt-decode";
 
-import { GrTransaction } from "react-icons/gr";
-import { MdLocalShipping, MdStore } from "react-icons/md";
+import { GrTransaction, GrCycle } from "react-icons/gr";
+import { FaBox } from "react-icons/fa6";
+import { IoBagCheck } from "react-icons/io5";
+
 import MaterialChartSupplier from "../ui/MaterialChartSupplier";
 import MaterialPie from "../ui/MaterialPie";
 
@@ -23,11 +25,11 @@ const DashboardSupplierPage = () => {
   const userId = token ? jwtDecode(token).userID : null;
 
   useEffect(() => {
-    fetchTransactions(`${import.meta.env.VITE_API_URL}/api/orders`);
+    fetchTransactions(`/api/orders`);
   }, [fetchTransactions]); // Menjalankan hanya sekali saat komponen dimuat
 
   useEffect(() => {
-    fetchProducts(`${import.meta.env.VITE_API_URL}/api/products`);
+    fetchProducts(`/api/products`);
   }, [fetchProducts]);
 
   useEffect(() => {
@@ -62,6 +64,18 @@ const DashboardSupplierPage = () => {
     }
   }, [transaction, userId]);
 
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="h-32 w-32 animate-spin rounded-full border-t-4 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <div className="min-h-screen p-8">
       <h3 className="mt-20 text-2xl font-semibold">Dashboard</h3>
@@ -92,7 +106,7 @@ const DashboardSupplierPage = () => {
           <div className="border-slate-200 relative flex w-56 flex-col rounded-lg border bg-white shadow-sm">
             <div className="px-4 py-5">
               <div className="flex items-center gap-x-4">
-                <GrTransaction size={24} />
+                <FaBox size={24} />
                 <h5 className="text-slate-800 text-xl font-semibold">
                   Stok Produk
                 </h5>
@@ -111,7 +125,7 @@ const DashboardSupplierPage = () => {
           <div className="border-slate-200 relative flex w-56 flex-col rounded-lg border bg-white shadow-sm">
             <div className="p-2">
               <div className="flex items-center gap-4">
-                <MdLocalShipping size={24} />
+                <GrCycle size={24} />
                 <h5 className="text-slate-800 text-xl font-semibold">
                   Transaksi Dalam Proses
                 </h5>
@@ -130,7 +144,7 @@ const DashboardSupplierPage = () => {
           <div className="border-slate-200 relative flex w-56 flex-col rounded-lg border bg-white shadow-sm">
             <div className="p-2">
               <div className="flex items-center gap-x-4">
-                <MdStore size={24} />
+                <IoBagCheck size={24} />
                 <h5 className="text-slate-800 text-xl font-semibold">
                   Transaksi Sukses
                 </h5>

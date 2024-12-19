@@ -32,15 +32,15 @@ const StakeholderLayout = () => {
       <NavigationStakeholder />
 
       <div className="w-full bg-blue-gray-50 lg:ml-80">
-        <div className="fixed left-0 right-0 top-0 z-50 hidden items-center justify-between bg-blue-200 px-8 py-4 lg:ml-80 lg:flex">
+        <div className="fixed left-0 right-0 top-0 z-50 hidden items-center justify-between bg-HIJAU px-8 py-4 lg:ml-80 lg:flex">
           <div className="flex items-center gap-4">
-            <h1 className="text-xl font-semibold drop-shadow-lg">
+            <h1 className="text-xl font-semibold text-white drop-shadow-lg">
               Stakeholder
             </h1>
           </div>
           <div>
-            <h1>{username}</h1>
-            <h3>{email}</h3>
+            <h1 className="text-white">{username}</h1>
+            <h3 className="text-white">{email}</h3>
           </div>
         </div>
         <Outlet />

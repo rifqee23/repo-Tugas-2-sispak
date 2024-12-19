@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import FormField from "../moleculs/FormField";
 import Button from "../atoms/Button";
 
-import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import useAuthStore from "@/utils/authStore";
 import { Typography } from "@material-tailwind/react";
+
+import axiosInstance from "@/axiosInstance";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -45,13 +46,10 @@ const LoginForm = () => {
     const cleanPassword = sanitizeInput(password);
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/login`,
-        {
-          username: cleanUsername,
-          password: cleanPassword,
-        },
-      );
+      const response = await axiosInstance.post(`/api/auth/login`, {
+        username: cleanUsername,
+        password: cleanPassword,
+      });
 
       console.log("Login Success", response.data);
       const token = response.data.data.token;
@@ -102,7 +100,7 @@ const LoginForm = () => {
         onChange={(e) => setPassword(e.target.value)}
         classNameLabel={"block text-sm font-medium text-gray-900"}
         classNameInput={
-          "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          "text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         }
       />
 

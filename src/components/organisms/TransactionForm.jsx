@@ -4,6 +4,7 @@ import Button from "../atoms/Button"; // Pastikan jalur ini benar
 import Cookies from "js-cookie";
 import { Typography } from "@material-tailwind/react";
 import axios from "axios";
+import axiosInstance from "@/axiosInstance";
 
 const TransactionForm = () => {
   const [supplier, setSupplier] = useState("");
@@ -21,14 +22,11 @@ const TransactionForm = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/products`,
-          {
-            headers: {
-              Authorization: `${token}`,
-            },
+        const response = await axiosInstance.get(`/api/products`, {
+          headers: {
+            Authorization: `${token}`,
           },
-        );
+        });
         const responseData = response.data.data;
         // Menggunakan Set untuk menyaring nilai yang unik
         const uniqueSuppliers = new Set();
@@ -88,8 +86,8 @@ const TransactionForm = () => {
     e.preventDefault();
     setError("");
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/orders`,
+      const response = await axiosInstance.post(
+        `/api/orders`,
         {
           userID: Number(supplier),
           productID: Number(product),

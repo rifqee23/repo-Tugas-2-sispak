@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Card, Typography } from "@material-tailwind/react";
 import Button from "../atoms/Button";
-import axios from "axios";
 import Cookies from "js-cookie";
+import axiosInstance from "@/axiosInstance";
 
 const TableTransaction = () => {
   const [orders, setOrders] = useState([]);
@@ -14,14 +14,11 @@ const TableTransaction = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/orders/my-orders`,
-          {
-            headers: {
-              Authorization: `${token}`,
-            },
+        const response = await axiosInstance.get(`/api/orders/my-orders`, {
+          headers: {
+            Authorization: `${token}`,
           },
-        );
+        });
 
         setOrders(response.data.data);
       } catch (error) {
@@ -40,17 +37,15 @@ const TableTransaction = () => {
     if (!confirmDelete) return; // Jika tidak dikonfirmasi, keluar dari fungsi
 
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/api/orders/${id}`, {
+      await axiosInstance.delete(`/api/orders/${id}`, {
         headers: {
           Authorization: `${token}`,
         },
       });
-      // Memperbarui state untuk menghapus pesanan dari tampilan
       setOrders((prevOrders) => {
         const updatedOrders = prevOrders.filter(
           (order) => order.orderID !== id,
         );
-        console.log("Updated Orders:", updatedOrders);
         return updatedOrders;
       });
     } catch (error) {
@@ -59,9 +54,14 @@ const TableTransaction = () => {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="h-32 w-32 animate-spin rounded-full border-t-4 border-blue-500"></div>
+      </div>
+    );
+  }
   if (error) return <p>Error: {error}</p>;
-  console.log(orders);
 
   return (
     <Card className="h-full w-full overflow-scroll">
