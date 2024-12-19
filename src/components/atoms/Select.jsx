@@ -1,25 +1,23 @@
 import React from "react";
-import { Select, Option } from "@material-tailwind/react";
 
-const Select = ({ name, value, onChange, options, id, className }) => {
+const SelectOption = ({ name, value, onChange, options, id, className }) => {
   return (
-    <>
-      <Select
-        label="Pilih"
+    <div className={`relative ${className}`}>
+      <select
         name={name}
         value={value}
         id={id}
-        className={`${className}`}
         onChange={onChange}
+        className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-500"
       >
-        {options.map((options) => (
-          <Option key={options.value} value={options.value}>
-            {options.label}
-          </Option>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
         ))}
-      </Select>
-    </>
+      </select>
+    </div>
   );
 };
 
-export default Select;
+export default SelectOption;
