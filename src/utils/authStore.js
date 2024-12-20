@@ -5,7 +5,6 @@ const useAuthStore = create((set) => ({
   isAuthenticated: !!Cookies.get("access_token"),
   loginUser: (token) => {
     Cookies.set("access_token", token, { expires: 3 });
-    console.log("Cookie set:", Cookies.get("access_token")); // Log untuk memeriksa cookie
 
     set({ isAuthenticated: true });
   },
@@ -16,7 +15,6 @@ const useAuthStore = create((set) => ({
   },
   getToken: () => {
     const token = Cookies.get("access_token");
-    // console.log("Retrieved token:", token);
     return token;
   },
 }));

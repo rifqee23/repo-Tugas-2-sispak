@@ -10,7 +10,7 @@ const useStore = create((set) => ({
   fetchOrdersById: async (url, id) => {
     set({ loading: true, error: null });
     try {
-      const res = await axios.get(`${url}/${id}`);
+      const res = await axiosInstance.get(`${url}/${id}`);
       set({ order: res.data.data, loading: false });
     } catch (error) {
       set({ error: error.message, loading: false });
