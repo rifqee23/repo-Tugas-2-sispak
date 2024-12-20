@@ -12,7 +12,6 @@ const TransactionForm = () => {
   const [supplierOptions, setSupplierOptions] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [loadingProducts, setLoadingProducts] = useState(false);
   const [error, setError] = useState("");
 
   const token = Cookies.get("access_token");
@@ -27,7 +26,7 @@ const TransactionForm = () => {
           },
         });
         const responseData = response.data.data;
-        // Menggunakan Set untuk menyaring nilai yang unik
+
         const uniqueSuppliers = new Set();
         const optionsDataSupplier = [];
 
@@ -43,18 +42,14 @@ const TransactionForm = () => {
             });
           }
         });
+
         setSupplierOptions(optionsDataSupplier);
-        if (supplier) {
-          setLoadingProducts(true);
-          const filteredProducts = responseData.filter(
-            (product) => product.userID === Number(supplier),
-          );
-          const optionsDataProduct = filteredProducts.map((response) => ({
-            value: String(response.productID),
-            label: response.name,
-          }));
-          setProductOptions(optionsDataProduct);
-          setLoadingProducts(false);
+        console.log("optionsDataSupplier", optionsDataSupplier);
+
+        if (optionsDataSupplier.length > 0) {
+          const firstSupplier = optionsDataSupplier[0].value;
+          setSupplier(firstSupplier);
+          await fetchProducts(firstSupplier, responseData);
         }
       } catch (error) {
         console.log(error.message);
@@ -63,7 +58,47 @@ const TransactionForm = () => {
       }
     };
     fetchData();
-  }, [supplier]);
+  }, [token]);
+
+  const fetchProducts = async (selectedSupplier, responseData) => {
+    // Filter produk berdasarkan supplier yang dipilih
+    const filteredProducts = responseData.filter(
+      (product) => String(product.userID) === selectedSupplier,
+    );
+
+    const optionsDataProduct = filteredProducts.map((response) => ({
+      value: Number(response.productID),
+      label: response.name,
+    }));
+
+    setProductOptions(optionsDataProduct);
+    console.log("optionsDataProduct", optionsDataProduct);
+  };
+
+  const handleSupplierChange = async (event) => {
+    const selectedSupplier = event.target.value;
+    setSupplier(selectedSupplier);
+    setProduct(""); // Reset product when supplier changes
+
+    if (selectedSupplier) {
+      try {
+        const response = await axiosInstance.get(`/api/products`, {
+          headers: {
+            Authorization: `${token}`,
+          },
+        });
+        const responseData = response.data.data;
+
+        // Ambil produk untuk supplier yang dipilih
+        await fetchProducts(selectedSupplier, responseData);
+      } catch (error) {
+        console.log(error.message);
+      }
+    } else {
+      setProductOptions([]);
+      console.log("No supplier selected");
+    }
+  };
 
   const validateQuantity = (quantity) => {
     const re = /^[0-9]+$/;
@@ -124,10 +159,7 @@ const TransactionForm = () => {
             name="transactionName"
             options={supplierOptions}
             value={supplier}
-            onChange={(event) => {
-              setSupplier(event.target.value);
-              setProduct("");
-            }}
+            onChange={handleSupplierChange}
             classNameLabel={"block text-sm font-medium text-gray-900 mt-2"}
           />
           <FormField
@@ -139,7 +171,7 @@ const TransactionForm = () => {
             onChange={(event) => {
               setProduct(event.target.value);
             }}
-            disabled={loadingProducts}
+            disabled={productOptions.length === 0}
             classNameLabel={"block text-sm font-medium text-gray-900 mt-2"}
           />
           <FormField
