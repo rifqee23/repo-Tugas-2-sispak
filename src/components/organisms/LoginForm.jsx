@@ -51,7 +51,6 @@ const LoginForm = () => {
         password: cleanPassword,
       });
 
-      console.log("Login Success", response.data);
       const token = response.data.data.token;
       const decodeToken = jwtDecode(token);
       const role = decodeToken.role;
