@@ -7,13 +7,8 @@ const ReportProduct = () => {
   const { order, loading, error, fetchOrdersById } = useStore((state) => state);
 
   useEffect(() => {
-    fetchOrdersById(
-      `${import.meta.env.VITE_API_URL}/api/orders/supplier/order`,
-      id,
-    );
+    fetchOrdersById(`/api/orders/supplier/order`, id);
   }, []);
-
-  console.log(order);
 
   if (loading) return <div className="text-center text-lg">Loading...</div>;
   if (error)
