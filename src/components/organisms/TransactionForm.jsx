@@ -107,8 +107,6 @@ const TransactionForm = () => {
     }
   };
 
-  console.log(supplier);
-
   return (
     <form onSubmit={handleSubmit}>
       {error && (

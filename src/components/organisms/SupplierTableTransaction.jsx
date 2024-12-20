@@ -61,8 +61,6 @@ const SupplierTableTransaction = () => {
     }
   };
 
-  console.log(orders);
-
   return (
     <div className="">
       <Card className="overflow-x-auto">
