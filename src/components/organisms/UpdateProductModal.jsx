@@ -5,6 +5,7 @@ import {
   DialogHeader,
   DialogBody,
   DialogFooter,
+  Spinner,
 } from "@material-tailwind/react";
 
 import FormField from "../moleculs/FormField";
@@ -223,6 +224,7 @@ const UpdateProductModal = ({ open, handler, onClick, onSubmit, product }) => {
       </DialogBody>
       <DialogFooter>
         <Button type="submit" onClick={handleSubmit} className="mr-1">
+          {isLoading && <Spinner className="mr-1 inline-flex" color="blue" />}
           <span>Save</span>
         </Button>
         <Button onClick={onClick} className="mr-1">
