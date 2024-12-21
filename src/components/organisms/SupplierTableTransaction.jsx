@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Card, Typography } from "@material-tailwind/react";
+import { Card, Typography, Spinner } from "@material-tailwind/react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import FormField from "../moleculs/FormField";
 import axiosInstance from "@/axiosInstance";
+import { CircularPagination } from "../ui/CircularPagination";
 
 const SupplierTableTransaction = () => {
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [itemsPerPage] = useState(5); // Jumlah item per halaman
+  const [active, setActive] = useState(1); // Halaman aktif
+
   const token = Cookies.get("access_token");
   const userId = token ? jwtDecode(token).userID : null;
 
@@ -20,12 +25,15 @@ const SupplierTableTransaction = () => {
         });
         const data = response.data.data;
 
+        // Filter orders based on userId
         const filteredOrders = data.filter(
           (order) => order.product.userID === userId,
         );
         setOrders(filteredOrders);
       } catch (error) {
         console.error("Error fetching orders:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -40,6 +48,7 @@ const SupplierTableTransaction = () => {
   ];
 
   const handleStatusChange = async (orderID, newStatus) => {
+    setLoading(true);
     try {
       await axiosInstance.put(
         `/api/orders/status`,
@@ -58,8 +67,27 @@ const SupplierTableTransaction = () => {
       });
     } catch (error) {
       console.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
+
+  // Hitung total halaman
+  const totalPages = Math.ceil(orders.length / itemsPerPage);
+
+  // Ambil data untuk halaman saat ini
+  const currentOrders = orders.slice(
+    (active - 1) * itemsPerPage,
+    active * itemsPerPage,
+  );
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center">
+        <Spinner color="blue" className="h-16 w-16" />;
+      </div>
+    );
+  }
 
   return (
     <div className="">
@@ -124,9 +152,9 @@ const SupplierTableTransaction = () => {
             </tr>
           </thead>
           <tbody>
-            {orders.length === 0 ? (
+            {currentOrders.length === 0 ? (
               <tr>
-                <td colSpan="5" className="p-4 text-center">
+                <td colSpan="6" className="p-4 text-center">
                   <Typography
                     variant="small"
                     color="red"
@@ -137,7 +165,7 @@ const SupplierTableTransaction = () => {
                 </td>
               </tr>
             ) : (
-              orders.map((order, index) => (
+              currentOrders.map((order, index) => (
                 <tr key={index}>
                   <td className="border-b border-blue-gray-50 p-4">
                     <Typography
@@ -209,6 +237,15 @@ const SupplierTableTransaction = () => {
           </tbody>
         </table>
       </Card>
+
+      {/* Kontrol Pagination */}
+      <div className="mt-5">
+        <CircularPagination
+          active={active}
+          setActive={setActive}
+          totalPages={totalPages}
+        />
+      </div>
     </div>
   );
 };

@@ -8,10 +8,13 @@ import { Typography } from "@material-tailwind/react";
 
 import axiosInstance from "@/axiosInstance";
 
+import { Spinner } from "@material-tailwind/react";
+
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const loginUser = useAuthStore((state) => state.loginUser);
 
@@ -28,9 +31,11 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     if (!username || !password) {
       setError("Username dan password harus diisi.");
+      setLoading(false);
       return;
     }
 
@@ -38,6 +43,8 @@ const LoginForm = () => {
       setError(
         "Username harus terdiri dari 3-20 karakter, hanya huruf, angka, dan underscore.",
       );
+      setLoading(false);
+
       return;
     }
 
@@ -69,6 +76,8 @@ const LoginForm = () => {
       } else {
         setError(error.message || "Login failed. Please try again later.");
       }
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -106,10 +115,13 @@ const LoginForm = () => {
       <Button
         type={"submit"}
         className={
-          "text-md mb-2 me-2 mt-4 w-full rounded-lg border border-gray-300 bg-blue-gray-700 px-5 py-2.5 font-medium text-white hover:bg-blue-gray-400 focus:outline-none focus:ring-4 focus:ring-gray-100"
+          "text-md relative mb-2 me-2 mt-4 w-full rounded-lg border border-gray-300 bg-blue-gray-700 px-5 py-2.5 font-medium text-white hover:bg-blue-gray-400 focus:outline-none focus:ring-4 focus:ring-gray-100"
         }
       >
         Login
+        {loading && (
+          <Spinner className="absolute right-4 inline-flex" color="blue" />
+        )}
       </Button>
     </form>
   );
