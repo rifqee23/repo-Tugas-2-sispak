@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Dialog,
@@ -86,6 +86,13 @@ const UpdateProductModal = ({ open, handler, onClick, onSubmit }) => {
       setError("Terjadi kesalahan saat memperbarui produk.");
     } finally {
       setIsLoading(false);
+      setName("");
+      setDesc("");
+      setPrice("");
+      setStock("");
+      setCategory(categoryOptions[0].value); // Reset to the first category
+      setUnit(unitOptions[0].value); // Reset to the first unit
+      setMaterial("");
     }
   };
 
@@ -111,6 +118,16 @@ const UpdateProductModal = ({ open, handler, onClick, onSubmit }) => {
     { value: "PACK", label: "PACK" },
   ];
 
+  useEffect(() => {
+    if (categoryOptions.length > 0 && !category) {
+      setCategory(categoryOptions[0].value);
+    }
+
+    if (unitOptions.length > 0 && !unit) {
+      setUnit(unitOptions[0].value);
+    }
+  }, [categoryOptions, unitOptions, category, unit]);
+
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -121,7 +138,7 @@ const UpdateProductModal = ({ open, handler, onClick, onSubmit }) => {
 
   return (
     <Dialog open={open} handler={handler}>
-      <DialogHeader>Edit Product</DialogHeader>
+      <DialogHeader>Tambah Product</DialogHeader>
       <DialogBody className="max-h-[400px] overflow-y-auto">
         {error && (
           <Typography variant="paragraph" color="red" className="mb-2">

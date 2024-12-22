@@ -7,6 +7,8 @@ import AddProductModal from "./AddProductModal";
 import { jwtDecode } from "jwt-decode";
 import { renderTableRow } from "@/utils/renderTableRow";
 import axiosInstance from "@/axiosInstance";
+import { CircularPagination } from "../ui/CircularPagination";
+import { Spinner } from "@material-tailwind/react";
 
 const TableProduct = () => {
   const [products, setProducts] = useState([]);
@@ -15,6 +17,8 @@ const TableProduct = () => {
   const [open, setOpen] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [itemsPerPage] = useState(5); // Jumlah item per halaman
+  const [active, setActive] = useState(1); // Halaman aktif
 
   const token = Cookies.get("access_token");
   const userId = token ? jwtDecode(token).userID : null;
@@ -110,6 +114,25 @@ const TableProduct = () => {
     }
   };
 
+  // Hitung total halaman
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+
+  // Ambil data untuk halaman saat ini
+  const currentProducts = products.slice(
+    (active - 1) * itemsPerPage,
+    active * itemsPerPage,
+  );
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Spinner color="blue" className="h-16 w-16" />
+      </div>
+    );
+  } else if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <>
       <Button
@@ -149,19 +172,7 @@ const TableProduct = () => {
             </tr>
           </thead>
           <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan="9" className="p-4 text-center">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    Loading...
-                  </Typography>
-                </td>
-              </tr>
-            ) : error || products.length === 0 ? (
+            {currentProducts.length === 0 ? (
               <tr>
                 <td colSpan="9" className="p-4 text-center">
                   <Typography
@@ -174,9 +185,9 @@ const TableProduct = () => {
                 </td>
               </tr>
             ) : (
-              products.map((item) =>
+              currentProducts.map((item) =>
                 renderTableRow(item, handleOpen, handleDeleteProduct),
-              ) // Menggunakan fungsi dari utils
+              )
             )}
           </tbody>
         </table>
@@ -195,6 +206,14 @@ const TableProduct = () => {
           onSubmit={handleUpdateProduct}
         />
       </Card>
+      {/* Kontrol Pagination */}
+      <div className="mt-5">
+        <CircularPagination
+          active={active}
+          setActive={setActive}
+          totalPages={totalPages}
+        />
+      </div>
     </>
   );
 };

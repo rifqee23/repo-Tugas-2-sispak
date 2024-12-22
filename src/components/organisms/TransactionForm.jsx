@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import { Typography } from "@material-tailwind/react";
 import axiosInstance from "@/axiosInstance";
 
+import { Spinner } from "@material-tailwind/react";
+
 const TransactionForm = () => {
   const [supplier, setSupplier] = useState("");
   const [product, setProduct] = useState("");
@@ -44,7 +46,6 @@ const TransactionForm = () => {
         });
 
         setSupplierOptions(optionsDataSupplier);
-        console.log("optionsDataSupplier", optionsDataSupplier);
 
         if (optionsDataSupplier.length > 0) {
           const firstSupplier = optionsDataSupplier[0].value;
@@ -72,7 +73,6 @@ const TransactionForm = () => {
     }));
 
     setProductOptions(optionsDataProduct);
-    console.log("optionsDataProduct", optionsDataProduct);
   };
 
   const handleSupplierChange = async (event) => {
@@ -100,6 +100,8 @@ const TransactionForm = () => {
     }
   };
 
+  console.log("selectedSupplier", supplier);
+
   const validateQuantity = (quantity) => {
     const re = /^[0-9]+$/;
     return re.test(quantity);
@@ -119,6 +121,7 @@ const TransactionForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
     try {
       const response = await axiosInstance.post(
         `/api/orders`,
@@ -139,6 +142,8 @@ const TransactionForm = () => {
       }
     } catch (error) {
       setError(error.response?.data?.message || "Gagal mengirim pesanan.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -190,10 +195,13 @@ const TransactionForm = () => {
       <Button
         type={"submit"}
         className={
-          "mb-2 me-2 mt-4 w-full rounded-lg border border-gray-300 bg-blue-gray-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-gray-400 focus:outline-none focus:ring-4 focus:ring-gray-100"
+          "relative mb-2 me-2 mt-4 w-full rounded-lg border border-gray-300 bg-blue-gray-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-gray-400 focus:outline-none focus:ring-4 focus:ring-gray-100"
         }
       >
         Order
+        {loading && (
+          <Spinner className="absolute right-4 inline-flex" color="blue" />
+        )}
       </Button>
     </form>
   );

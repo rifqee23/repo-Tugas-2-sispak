@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FormField from "../moleculs/FormField";
 import Button from "../atoms/Button";
-import axios from "axios";
 import { ModalRegistrasi } from "../ui/MaterialModal";
 import { Typography } from "@material-tailwind/react";
 import axiosInstance from "@/axiosInstance";
+
+import { Spinner } from "@material-tailwind/react";
 
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
@@ -14,6 +15,7 @@ const RegisterForm = () => {
   const [role, setRole] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -28,14 +30,17 @@ const RegisterForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     if (!username || !email || !password || !confirmPassword) {
       setError("Tolong isi semua inputnya");
+      setLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
       setError("Password dan Confirm Password harus sama.");
+      setLoading(false);
       return;
     }
 
@@ -43,11 +48,13 @@ const RegisterForm = () => {
       setError(
         "Username harus terdiri dari 3-20 karakter, hanya huruf, angka, dan underscore.",
       );
+      setLoading(false);
       return;
     }
 
     if (!validateEmail(email)) {
       setError("Format email tidak valid.");
+      setLoading(false);
       return;
     }
 
@@ -62,13 +69,24 @@ const RegisterForm = () => {
       {
         response.data.message === "Register successfully" && setShowModal(true);
       }
-    } catch (error) {}
+    } catch (error) {
+      setError(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const roleOptions = [
     { value: "STAKEHOLDER", label: "Stakeholder" },
     { value: "SUPPLIER", label: "Supplier" },
   ];
+
+  // Mengambil role index pertama
+  useEffect(() => {
+    if (roleOptions.length > 0 && !role) {
+      setRole(roleOptions[0].value); // Set to the first role only if role is empty
+    }
+  }, [roleOptions, role]);
 
   return (
     <>
@@ -154,10 +172,15 @@ const RegisterForm = () => {
         <Button
           type={"submit"}
           className={
-            "mb-2 me-2 mt-4 w-full rounded-lg border border-gray-300 bg-HIJAU px-5 py-2.5 text-lg font-medium text-white hover:bg-blue-gray-400 focus:outline-none focus:ring-4 focus:ring-gray-100"
+
+            "relative mb-2 me-2 mt-4 w-full rounded-lg border border-gray-300 bg-blue-gray-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-gray-400 focus:outline-none focus:ring-4 focus:ring-gray-100"
+
           }
         >
           Register
+          {loading && (
+            <Spinner className="absolute right-4 inline-flex" color="blue" />
+          )}
         </Button>
       </form>
     </>
