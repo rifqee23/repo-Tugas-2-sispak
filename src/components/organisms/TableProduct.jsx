@@ -129,15 +129,15 @@ const TableProduct = () => {
         <Spinner color="blue" className="h-16 w-16" />
       </div>
     );
-  } else if (error) {
-    return <div>Error: {error}</div>;
   }
 
   return (
     <>
       <Button
         onClick={handleOpenAdd}
-        className={"text-white font-semibold mb-4 rounded-md bg-HIJAU px-2 py-1"}
+        className={
+          "mb-4 rounded-md bg-HIJAU px-2 py-1 font-semibold text-white"
+        }
       >
         TAMBAH BARANG
       </Button>
@@ -156,10 +156,7 @@ const TableProduct = () => {
                 "Material",
                 "Action",
               ].map((header) => (
-                <th
-                  key={header}
-                  className="border-b border-HIJAU p-4"
-                >
+                <th key={header} className="border-b border-HIJAU p-4">
                   <Typography
                     variant="small"
                     color="HIJAU"
