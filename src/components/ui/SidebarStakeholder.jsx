@@ -4,19 +4,9 @@ import {
   List,
   ListItem,
   ListItemPrefix,
-  ListItemSuffix,
-  Chip,
-  Accordion,
-  AccordionHeader,
-  AccordionBody,
 } from "@material-tailwind/react";
-import {
-  PresentationChartBarIcon,
-  InboxIcon,
-  PowerIcon,
-} from "@heroicons/react/24/solid";
-import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-import { AiFillDatabase } from "react-icons/ai";
+import { PresentationChartBarIcon, PowerIcon } from "@heroicons/react/24/solid";
+
 import { GrTransaction } from "react-icons/gr";
 import { HiDocumentReport } from "react-icons/hi";
 import { Link } from "react-router-dom";
@@ -24,13 +14,9 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import useAuthStore from "@/utils/authStore";
 
+import logoZ4IN from "@/assets/logoZ4IN.png";
+
 export function SidebarStakeHolder() {
-  const [open, setOpen] = React.useState(0);
-
-  const handleOpen = (value) => {
-    setOpen(open === value ? 0 : value);
-  };
-
   useEffect(() => {
     const sidebar = document.getElementById("sidebar");
 
@@ -50,34 +36,39 @@ export function SidebarStakeHolder() {
   return (
     <div
       id="sidebar"
-      className="fixed h-full w-full max-w-[20rem] bg-blue-200 p-4 shadow-xl shadow-blue-gray-900/5"
+      className="fixed h-full w-full max-w-[20rem] bg-HIJAU p-4 shadow-xl shadow-blue-gray-900/5"
     >
-      <div className="mb-2 p-4">
-        <Typography variant="h5" color="blue-gray">
-          Stakeholder
-        </Typography>
+      <div className="mb-0 p-0 flex justify-center item-c">
+        <img
+          src={logoZ4IN}
+          alt="Logo Z4IN"
+          style={{ width: "auto", height: "120px" }}
+        />
       </div>
-      <List>
+      <List className="ml-2">
         <Link>
-          <ListItem>
+          <ListItem className="group">
             <ListItemPrefix>
-              <PresentationChartBarIcon className="h-5 w-5" />
+              <PresentationChartBarIcon className="h-5 w-5 text-white group-hover:text-black" />
             </ListItemPrefix>
-            <Typography color="blue-gray" className="mr-auto font-normal">
+            <Typography
+              color="white"
+              className="mr-auto font-normal group-hover:text-black"
+            >
               Dashboard
             </Typography>
           </ListItem>
         </Link>
         <Link to={"/stakeholder/transaction"}>
-          <ListItem>
+          <ListItem className="group text-white hover:text-black">
             <ListItemPrefix>
-              <GrTransaction className="h-5 w-5" />
+              <GrTransaction className="h-5 w-5 text-white group-hover:text-black" />
             </ListItemPrefix>
             Transaksi
           </ListItem>
         </Link>
         <Link to={"/stakeholder/report"}>
-          <ListItem>
+          <ListItem className="group text-white hover:text-black">
             <ListItemPrefix>
               <HiDocumentReport className="h-5 w-5" />
             </ListItemPrefix>
@@ -86,7 +77,7 @@ export function SidebarStakeHolder() {
         </Link>
         <hr className="my-2 border-blue-gray-50" />
         <Link to={"/login"} onClick={logoutUser}>
-          <ListItem>
+          <ListItem className="group text-white hover:text-black">
             <ListItemPrefix>
               <PowerIcon className="h-5 w-5" />
             </ListItemPrefix>

@@ -13,8 +13,7 @@ export const renderTableRow = (item, handleOpen, handleDeleteProduct) => {
     category,
     unit,
     material,
-  } = item; // Destructuring item
-  console.log(item.productID);
+  } = item;
 
   return (
     <tr key={productID}>

@@ -3,8 +3,8 @@ import SupplierTableTransaction from "../organisms/SupplierTableTransaction";
 
 const SupplierTransactionPage = () => {
   return (
-    <div className="flex h-screen items-center justify-center">
-      <div>
+    <div className="flex min-h-screen items-center justify-center bg-BIRU">
+      <div className="w-full px-5 lg:pt-40">
         <SupplierTableTransaction />
       </div>
     </div>

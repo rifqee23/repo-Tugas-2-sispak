@@ -10,22 +10,17 @@ import {
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
-import {
-  PresentationChartBarIcon,
-  InboxIcon,
-  PowerIcon,
-} from "@heroicons/react/24/solid";
-import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
+import { PresentationChartBarIcon, PowerIcon } from "@heroicons/react/24/solid";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { AiFillDatabase } from "react-icons/ai";
 import { GrTransaction } from "react-icons/gr";
-import { HiDocumentReport } from "react-icons/hi";
 import { BsBoxSeam } from "react-icons/bs";
 import { Link } from "react-router-dom";
 
 import { useEffect } from "react";
 import useAuthStore from "@/utils/authStore";
 
-import logoZ4IN from '@/assets/logoZ4IN.png';
+import logoZ4IN from "@/assets/logoZ4IN.png";
 
 export function SidebarSupplier() {
   const [open, setOpen] = React.useState(0);
@@ -53,10 +48,15 @@ export function SidebarSupplier() {
   return (
     <div
       id="sidebar"
-      className="fixed h-full w-full max-w-[20rem] bg-HIJAU p-4 shadow-xl shadow-blue-gray-900/5 text-white flex flex-col items-center"
+      className="fixed flex h-full w-full max-w-[20rem] flex-col items-center bg-HIJAU p-4 text-white shadow-xl shadow-blue-gray-900/5"
     >
-      <div className="mb-0 p-0 ">
-        <img src={logoZ4IN} alt="Logo Z4IN" style={{ width: "auto", height: "120px" }} className=""/>
+      <div className="mb-0 p-0">
+        <img
+          src={logoZ4IN}
+          alt="Logo Z4IN"
+          style={{ width: "auto", height: "120px" }}
+          className=""
+        />
       </div>
       <List className="text-white">
         <Link>
@@ -64,9 +64,7 @@ export function SidebarSupplier() {
             <ListItemPrefix>
               <PresentationChartBarIcon className="h-5 w-5" />
             </ListItemPrefix>
-            <Typography  className="mr-auto font-normal ">
-              Dashboard
-            </Typography>
+            <Typography className="mr-auto font-normal">Dashboard</Typography>
           </ListItem>
         </Link>
 
@@ -81,25 +79,29 @@ export function SidebarSupplier() {
             />
           }
         >
-          <ListItem className="p-0" selected={open === 2}>
+          <ListItem
+            className="group bg-transparent p-0 hover:text-black"
+            selected={open === 2}
+          >
             <AccordionHeader
               onClick={() => handleOpen(2)}
               className="border-b-5 p-3"
             >
               <ListItemPrefix>
-                <AiFillDatabase className="h-5 w-5 text-white" />
+                <AiFillDatabase className="h-5 w-5 text-white group-hover:text-black" />
               </ListItemPrefix>
-              <Typography color="white" className="mr-auto font-normal">
+              <Typography className="w-full font-normal text-white group-hover:text-black">
                 Master Data
               </Typography>
             </AccordionHeader>
           </ListItem>
+
           <AccordionBody className="py-1">
             <List className="p-0">
               <Link to={"product"}>
                 <ListItem className="text-white">
                   <ListItemPrefix>
-                    <BsBoxSeam className="h-6 w-5 "/>
+                    <BsBoxSeam className="h-6 w-5" />
                   </ListItemPrefix>
                   Data Barang
                 </ListItem>
@@ -107,8 +109,6 @@ export function SidebarSupplier() {
             </List>
           </AccordionBody>
         </Accordion>
-        <hr className="my-2 border-blue-gray-50" />
-
         <Link to={"transaction"}>
           <ListItem>
             <ListItemPrefix>
@@ -117,12 +117,7 @@ export function SidebarSupplier() {
             Transaksi
           </ListItem>
         </Link>
-        <ListItem>
-          <ListItemPrefix>
-            <HiDocumentReport className="h-5 w-5" />
-          </ListItemPrefix>
-          Laporan
-        </ListItem>
+        <hr className="my-2 border-blue-gray-50" />
         <Link to={"/login"} onClick={logoutUser}>
           <ListItem>
             <ListItemPrefix>

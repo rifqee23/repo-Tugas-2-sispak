@@ -7,37 +7,57 @@ const ReportProduct = () => {
   const { order, loading, error, fetchOrdersById } = useStore((state) => state);
 
   useEffect(() => {
-    fetchOrdersById(
-      `${import.meta.env.VITE_API_URL}/api/orders/supplier/order`,
-      id,
-    );
+    fetchOrdersById(`/api/orders/supplier/order`, id);
   }, []);
 
-  console.log(order);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Order Not Found</div>;
+  if (loading) return <div className="text-center text-lg">Loading...</div>;
+  if (error)
+    return (
+      <div className="text-center text-lg text-red-500">Order Not Found</div>
+    );
   return (
-    <div>
-      <h3>Detail Pesanan</h3>
-      <p>ID Pesanan: {order?.orderID}</p>
-      <p>Status: {order?.status}</p>
-      <p>Jumlah: {order?.quantity}</p>
-      <p>Tanggal Dibuat: {new Date(order?.created_at).toLocaleString()}</p>
-
-      <h3>Produk</h3>
-      <p>Nama Produk: {order?.product?.name}</p>
-      <p>Deskripsi: {order?.product?.description}</p>
-      <p>
-        Harga:{" "}
-        {order?.product?.price.toLocaleString("id-ID", {
-          style: "currency",
-          currency: "IDR",
-        })}
+    <div className="mx-auto max-w-2xl rounded-lg bg-white p-6 shadow-md">
+      <h3 className="mb-4 text-2xl font-bold">Detail Pesanan</h3>
+      <p className="text-lg">
+        ID Pesanan: <span className="font-semibold">{order?.orderID}</span>
+      </p>
+      <p className="text-lg">
+        Status: <span className="font-semibold">{order?.status}</span>
+      </p>
+      <p className="text-lg">
+        Jumlah: <span className="font-semibold">{order?.quantity}</span>
+      </p>
+      <p className="text-lg">
+        Tanggal Dibuat:{" "}
+        <span className="font-semibold">
+          {new Date(order?.created_at).toLocaleString()}
+        </span>
       </p>
 
-      <h3>Pelanggan</h3>
-      <p>Nama Pelanggan: {order?.customer?.username}</p>
+      <h3 className="mb-4 mt-6 text-2xl font-bold">Produk</h3>
+      <p className="text-lg">
+        Nama Produk:{" "}
+        <span className="font-semibold">{order?.product?.name}</span>
+      </p>
+      <p className="text-lg">
+        Deskripsi:{" "}
+        <span className="font-semibold">{order?.product?.description}</span>
+      </p>
+      <p className="text-lg">
+        Harga:{" "}
+        <span className="font-semibold">
+          {order?.product?.price.toLocaleString("id-ID", {
+            style: "currency",
+            currency: "IDR",
+          })}
+        </span>
+      </p>
+
+      <h3 className="mb-4 mt-6 text-2xl font-bold">Pelanggan</h3>
+      <p className="text-lg">
+        Nama Pelanggan:{" "}
+        <span className="font-semibold">{order?.customer?.username}</span>
+      </p>
     </div>
   );
 };

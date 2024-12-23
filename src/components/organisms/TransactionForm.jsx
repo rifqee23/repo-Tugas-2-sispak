@@ -3,7 +3,9 @@ import FormField from "../moleculs/FormField"; // Pastikan jalur ini benar
 import Button from "../atoms/Button"; // Pastikan jalur ini benar
 import Cookies from "js-cookie";
 import { Typography } from "@material-tailwind/react";
-import axios from "axios";
+import axiosInstance from "@/axiosInstance";
+
+import { Spinner } from "@material-tailwind/react";
 
 const TransactionForm = () => {
   const [supplier, setSupplier] = useState("");
@@ -12,7 +14,6 @@ const TransactionForm = () => {
   const [supplierOptions, setSupplierOptions] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [loadingProducts, setLoadingProducts] = useState(false);
   const [error, setError] = useState("");
 
   const token = Cookies.get("access_token");
@@ -21,16 +22,13 @@ const TransactionForm = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/products`,
-          {
-            headers: {
-              Authorization: `${token}`,
-            },
+        const response = await axiosInstance.get(`/api/products`, {
+          headers: {
+            Authorization: `${token}`,
           },
-        );
+        });
         const responseData = response.data.data;
-        // Menggunakan Set untuk menyaring nilai yang unik
+
         const uniqueSuppliers = new Set();
         const optionsDataSupplier = [];
 
@@ -46,18 +44,13 @@ const TransactionForm = () => {
             });
           }
         });
+
         setSupplierOptions(optionsDataSupplier);
-        if (supplier) {
-          setLoadingProducts(true);
-          const filteredProducts = responseData.filter(
-            (product) => product.userID === Number(supplier),
-          );
-          const optionsDataProduct = filteredProducts.map((response) => ({
-            value: String(response.productID),
-            label: response.name,
-          }));
-          setProductOptions(optionsDataProduct);
-          setLoadingProducts(false);
+
+        if (optionsDataSupplier.length > 0) {
+          const firstSupplier = optionsDataSupplier[0].value;
+          setSupplier(firstSupplier);
+          await fetchProducts(firstSupplier, responseData);
         }
       } catch (error) {
         console.log(error.message);
@@ -66,7 +59,48 @@ const TransactionForm = () => {
       }
     };
     fetchData();
-  }, [supplier]);
+  }, [token]);
+
+  const fetchProducts = async (selectedSupplier, responseData) => {
+    // Filter produk berdasarkan supplier yang dipilih
+    const filteredProducts = responseData.filter(
+      (product) => String(product.userID) === selectedSupplier,
+    );
+
+    const optionsDataProduct = filteredProducts.map((response) => ({
+      value: Number(response.productID),
+      label: response.name,
+    }));
+
+    setProductOptions(optionsDataProduct);
+  };
+
+  const handleSupplierChange = async (event) => {
+    const selectedSupplier = event.target.value;
+    setSupplier(selectedSupplier);
+    setProduct(""); // Reset product when supplier changes
+
+    if (selectedSupplier) {
+      try {
+        const response = await axiosInstance.get(`/api/products`, {
+          headers: {
+            Authorization: `${token}`,
+          },
+        });
+        const responseData = response.data.data;
+
+        // Ambil produk untuk supplier yang dipilih
+        await fetchProducts(selectedSupplier, responseData);
+      } catch (error) {
+        console.log(error.message);
+      }
+    } else {
+      setProductOptions([]);
+      console.log("No supplier selected");
+    }
+  };
+
+  console.log("selectedSupplier", supplier);
 
   const validateQuantity = (quantity) => {
     const re = /^[0-9]+$/;
@@ -87,9 +121,10 @@ const TransactionForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/orders`,
+      const response = await axiosInstance.post(
+        `/api/orders`,
         {
           userID: Number(supplier),
           productID: Number(product),
@@ -107,6 +142,8 @@ const TransactionForm = () => {
       }
     } catch (error) {
       setError(error.response?.data?.message || "Gagal mengirim pesanan.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -127,10 +164,7 @@ const TransactionForm = () => {
             name="transactionName"
             options={supplierOptions}
             value={supplier}
-            onChange={(value) => {
-              setSupplier(value);
-              setProduct("");
-            }}
+            onChange={handleSupplierChange}
             classNameLabel={"block text-sm font-medium text-gray-900 mt-2"}
           />
           <FormField
@@ -139,10 +173,10 @@ const TransactionForm = () => {
             name="transactionName"
             options={productOptions}
             value={product}
-            onChange={(value) => {
-              setProduct(value);
+            onChange={(event) => {
+              setProduct(event.target.value);
             }}
-            disabled={loadingProducts}
+            disabled={productOptions.length === 0}
             classNameLabel={"block text-sm font-medium text-gray-900 mt-2"}
           />
           <FormField
@@ -161,10 +195,13 @@ const TransactionForm = () => {
       <Button
         type={"submit"}
         className={
-          "mb-2 me-2 mt-4 w-full rounded-lg border border-gray-300 bg-blue-gray-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-gray-400 focus:outline-none focus:ring-4 focus:ring-gray-100"
+          "relative mb-2 me-2 mt-4 w-full rounded-lg border border-gray-300 bg-blue-gray-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-gray-400 focus:outline-none focus:ring-4 focus:ring-gray-100"
         }
       >
         Order
+        {loading && (
+          <Spinner className="absolute right-4 inline-flex" color="blue" />
+        )}
       </Button>
     </form>
   );

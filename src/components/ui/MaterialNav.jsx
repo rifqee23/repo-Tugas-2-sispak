@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Navbar,
-  Typography,
-  Button,
-  IconButton,
-} from "@material-tailwind/react";
+import { Navbar, Typography, IconButton } from "@material-tailwind/react";
 import { Collapse } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 
@@ -14,25 +9,25 @@ export function MaterialNav() {
   React.useEffect(() => {
     window.addEventListener(
       "resize",
-      () => window.innerWidth >= 960 && setOpenNav(false)
+      () => window.innerWidth >= 960 && setOpenNav(false),
     );
   }, []);
 
   return (
-    <Navbar className="mx-auto max-w-screen-xl fixed left-0 right-0 top-2 px-4 py-2 lg:px-8 lg:py-4">
+    <Navbar className="fixed left-0 right-0 top-2 mx-auto max-w-screen-xl px-4 py-2 lg:px-8 lg:py-4">
       <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
         <Typography
           as="a"
           href="#"
           className="mr-4 cursor-pointer py-1.5 font-medium"
         >
-          Material Tailwind
+          Z4IN
         </Typography>
         <div className="flex items-center gap-x-1">
-          <Link to={"/login"}>
+          <Link className="hidden lg:inline-block" to={"/login"}>
             <span>Log In</span>
           </Link>
-          <Link to={"/register"}>
+          <Link className="hidden lg:inline-block" to={"/register"}>
             <span>Sign in</span>
           </Link>
         </div>
@@ -76,12 +71,12 @@ export function MaterialNav() {
       </div>
       <Collapse open={openNav}>
         <div className="container mx-auto">
-          <div className="flex items-center gap-x-1">
+          <div className="flex items-center gap-x-4">
             <Link to={"/login"}>
-              <span>Log In</span>
+              <Typography color="blue-gray">Log In</Typography>
             </Link>
             <Link to={"/register"}>
-              <span>Sign in</span>
+              <Typography color="blue-gray">Sign in</Typography>
             </Link>
           </div>
         </div>

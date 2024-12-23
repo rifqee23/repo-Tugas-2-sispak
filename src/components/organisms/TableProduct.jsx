@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Card, Typography } from "@material-tailwind/react";
 import Button from "../atoms/Button";
-import axios from "axios";
 import Cookies from "js-cookie";
-import UpdateProductModal from "./updateProductModal";
-import AddProductModal from "./addProductModal";
+import UpdateProductModal from "./UpdateProductModal";
+import AddProductModal from "./AddProductModal";
 import { jwtDecode } from "jwt-decode";
-import { renderTableRow } from "@/utils/renderTableRow"; // Pastikan path ini benar
+import { renderTableRow } from "@/utils/renderTableRow";
+import axiosInstance from "@/axiosInstance";
+import { CircularPagination } from "../ui/CircularPagination";
+import { Spinner } from "@material-tailwind/react";
 
 const TableProduct = () => {
   const [products, setProducts] = useState([]);
@@ -15,9 +17,11 @@ const TableProduct = () => {
   const [open, setOpen] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [itemsPerPage] = useState(5); // Jumlah item per halaman
+  const [active, setActive] = useState(1); // Halaman aktif
 
   const token = Cookies.get("access_token");
-  const userId = jwtDecode(token).userID; // Dekode token untuk mendapatkan userID
+  const userId = token ? jwtDecode(token).userID : null;
 
   // Fungsi untuk membuka modal dan mengatur produk yang dipilih
   const handleOpen = (product) => {
@@ -41,19 +45,14 @@ const TableProduct = () => {
 
   // Fungsi untuk menghapus produk
   const handleDeleteProduct = async (productID) => {
-    console.log("Deleting product with ID:", productID); // Log ID produk yang akan dihapus
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_API_URL}/api/products/${productID}`,
-        {
-          headers: { Authorization: `${token}` },
-        },
-      );
+      await axiosInstance.delete(`/api/products/${productID}`, {
+        headers: { Authorization: `${token}` },
+      });
       setProducts((prev) =>
         prev.filter((item) => item.productID !== productID),
       );
     } catch (error) {
-      console.error("Error response:", error.response); // Log respons kesalahan
       setError("Error deleting product: " + error.message);
     } finally {
       setLoading(false);
@@ -64,9 +63,11 @@ const TableProduct = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/products/user/${userId}`,
-          { headers: { Authorization: `${token}` } },
+        const response = await axiosInstance.get(
+          `/api/products/user/${userId}`,
+          {
+            headers: { Authorization: `${token}` },
+          },
         );
         setProducts(response.data.data);
       } catch (error) {
@@ -81,8 +82,8 @@ const TableProduct = () => {
   // Fungsi untuk memperbarui produk
   const handleUpdateProduct = async (updatedProduct) => {
     try {
-      await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/products/${selectedProduct.productID}`,
+      await axiosInstance.put(
+        `/api/products/${selectedProduct.productID}`,
         updatedProduct,
         { headers: { Authorization: `${token}` } },
       );
@@ -102,13 +103,9 @@ const TableProduct = () => {
 
   const handleAddProduct = async (newProduct) => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/products`,
-        newProduct,
-        {
-          headers: { Authorization: `${token}` },
-        },
-      );
+      const response = await axiosInstance.post(`/api/products`, newProduct, {
+        headers: { Authorization: `${token}` },
+      });
       setProducts((prev) => [...prev, response.data.data]);
     } catch (error) {
       setError("Error adding product: " + error.message);
@@ -117,20 +114,37 @@ const TableProduct = () => {
     }
   };
 
-  console.log(products);
+  // Hitung total halaman
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+
+  // Ambil data untuk halaman saat ini
+  const currentProducts = products.slice(
+    (active - 1) * itemsPerPage,
+    active * itemsPerPage,
+  );
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Spinner color="blue" className="h-16 w-16" />
+      </div>
+    );
+  }
 
   return (
     <>
       <Button
         onClick={handleOpenAdd}
-        className={"mb-4 rounded-md bg-deep-orange-200 px-2 py-1"}
+        className={
+          "mb-4 rounded-md bg-HIJAU px-2 py-1 font-semibold text-white"
+        }
       >
-        Add Product
+        TAMBAH BARANG
       </Button>
       <Card className="overflow-x-auto">
         <table className="min-w-full text-left">
           <thead>
-            <tr>
+            <tr className="text-HIJAU">
               {[
                 "ID",
                 "Name",
@@ -142,14 +156,11 @@ const TableProduct = () => {
                 "Material",
                 "Action",
               ].map((header) => (
-                <th
-                  key={header}
-                  className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
-                >
+                <th key={header} className="border-b border-HIJAU p-4">
                   <Typography
                     variant="small"
-                    color="blue-gray"
-                    className="font-normal leading-none opacity-70"
+                    color="HIJAU"
+                    className="font-extrabold leading-none opacity-70"
                   >
                     {header}
                   </Typography>
@@ -158,19 +169,7 @@ const TableProduct = () => {
             </tr>
           </thead>
           <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan="9" className="p-4 text-center">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    Loading...
-                  </Typography>
-                </td>
-              </tr>
-            ) : error || products.length === 0 ? (
+            {currentProducts.length === 0 ? (
               <tr>
                 <td colSpan="9" className="p-4 text-center">
                   <Typography
@@ -183,9 +182,9 @@ const TableProduct = () => {
                 </td>
               </tr>
             ) : (
-              products.map((item) =>
+              currentProducts.map((item) =>
                 renderTableRow(item, handleOpen, handleDeleteProduct),
-              ) // Menggunakan fungsi dari utils
+              )
             )}
           </tbody>
         </table>
@@ -204,6 +203,14 @@ const TableProduct = () => {
           onSubmit={handleUpdateProduct}
         />
       </Card>
+      {/* Kontrol Pagination */}
+      <div className="mt-5">
+        <CircularPagination
+          active={active}
+          setActive={setActive}
+          totalPages={totalPages}
+        />
+      </div>
     </>
   );
 };
