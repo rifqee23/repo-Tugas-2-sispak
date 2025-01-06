@@ -29,6 +29,12 @@ const TransactionForm = () => {
         });
         const responseData = response.data.data;
 
+        // Pastikan ada data yang diterima
+        if (!responseData || responseData.length === 0) {
+          setError("Tidak ada data produk tersedia");
+          return;
+        }
+
         const uniqueSuppliers = new Set();
         const optionsDataSupplier = [];
 
@@ -47,32 +53,63 @@ const TransactionForm = () => {
 
         setSupplierOptions(optionsDataSupplier);
 
+        // Set supplier pertama sebagai default
         if (optionsDataSupplier.length > 0) {
           const firstSupplier = optionsDataSupplier[0].value;
           setSupplier(firstSupplier);
-          await fetchProducts(firstSupplier, responseData);
+
+          // Filter produk untuk supplier pertama
+          const supplierProducts = responseData.filter(
+            (product) => String(product.userID) === firstSupplier,
+          );
+
+          const optionsDataProduct = supplierProducts.map((product) => ({
+            value: product.productID,
+            label: product.name,
+          }));
+
+          setProductOptions(optionsDataProduct);
+
+          // Set produk pertama sebagai default
+          if (optionsDataProduct.length > 0) {
+            setProduct(optionsDataProduct[0].value);
+          }
         }
       } catch (error) {
-        console.log(error.message);
+        console.error("Error fetching data:", error);
+        setError("Gagal memuat data supplier dan produk");
       } finally {
         setLoading(false);
       }
     };
-    fetchData();
+
+    if (token) {
+      fetchData();
+    }
   }, [token]);
 
   const fetchProducts = async (selectedSupplier, responseData) => {
-    // Filter produk berdasarkan supplier yang dipilih
-    const filteredProducts = responseData.filter(
-      (product) => String(product.userID) === selectedSupplier,
-    );
+    try {
+      // Filter produk berdasarkan supplier yang dipilih
+      const filteredProducts = responseData.filter(
+        (product) => String(product.userID) === selectedSupplier,
+      );
 
-    const optionsDataProduct = filteredProducts.map((response) => ({
-      value: Number(response.productID),
-      label: response.name,
-    }));
+      const optionsDataProduct = filteredProducts.map((product) => ({
+        value: product.productID,
+        label: product.name,
+      }));
 
-    setProductOptions(optionsDataProduct);
+      setProductOptions(optionsDataProduct);
+
+      // Set produk pertama sebagai default saat supplier berubah
+      if (optionsDataProduct.length > 0) {
+        setProduct(optionsDataProduct[0].value);
+      }
+    } catch (error) {
+      console.error("Error in fetchProducts:", error);
+      setError("Gagal memuat data produk");
+    }
   };
 
   const handleSupplierChange = async (event) => {
